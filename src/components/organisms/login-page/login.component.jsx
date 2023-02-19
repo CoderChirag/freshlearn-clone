@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Grid } from '@mui/material';
 
-import GoogleButton from '../atoms/google-button/google-button.component';
+import GoogleButton from '../../atoms/google-button/google-button.component';
 
 const Login = () => {
 	return (
