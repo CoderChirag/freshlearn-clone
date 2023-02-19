@@ -30,6 +30,8 @@ export const UserProvider = ({ children }) => {
 
 	const setCurrentUser = useMemo(
 		() => user => {
+			console.log('Auth state changed');
+			console.log(user);
 			if (user) {
 				window.localStorage.setItem('user', JSON.stringify(user));
 			} else {
