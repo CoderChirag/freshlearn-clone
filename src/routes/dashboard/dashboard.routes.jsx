@@ -1,6 +1,7 @@
 import { Outlet, useLocation, Navigate } from 'react-router-dom';
 
 import RouteProtection from '../../components/organisms/route-protection/routeProtection.component';
+import DashboardTemplate from '../../components/molecules/dashboard-template/dashboard-template.component';
 
 const DashboardRoutes = () => {
 	const location = useLocation();
@@ -8,9 +9,9 @@ const DashboardRoutes = () => {
 		<Navigate to='/dashboard/home' />
 	) : (
 		<RouteProtection>
-			{console.log(location)}
-			<div>Dashboard</div>
-			<Outlet />
+			<DashboardTemplate>
+				<Outlet />
+			</DashboardTemplate>
 		</RouteProtection>
 	);
 };
