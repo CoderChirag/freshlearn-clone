@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { UserContext } from '../../../contexts/user/user.context';
-import { Box, Grid, Menu, MenuItem, Typography } from '@mui/material';
+import { Box, Grid, Menu, MenuItem } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import Avatar from '@mui/material/Avatar';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
@@ -16,10 +16,13 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import PieChartIcon from '@mui/icons-material/PieChart';
 import AppsIcon from '@mui/icons-material/Apps';
 
+import SidebarItem from '../../atoms/sidebar-item/sidebar-item.component';
+import SidebarSubItem from '../../atoms/sidebar-subitem/sidebar-subitem.component';
 import { signOutUser } from '../../../util/firebase/auth/firebase-auth.util';
 
 const DashboardTemplate = ({ children }) => {
 	const { currentUser } = useContext(UserContext);
+	const location = useLocation();
 	// Logout Menu State
 	const [logoutMenuOpen, setLogoutMenuOpen] = useState(null);
 	const logoutMenuState = Boolean(logoutMenuOpen);
@@ -43,6 +46,139 @@ const DashboardTemplate = ({ children }) => {
 	const handleProductsAccordion = () => {
 		setProductsAccordionOpen(prev => !prev);
 	};
+
+	// Sidebar Items
+	const sidebarItems = [
+		{
+			key: 1,
+			title: 'Dashboard',
+			icon: (
+				<DashboardIcon
+					sx={{ transform: 'scale(0.8)', color: '#7590FF' }}
+				/>
+			),
+			location: /\/dashboard\/home\/*$/i,
+		},
+		{
+			key: 2,
+			title: 'Members',
+			icon: (
+				<GroupIcon sx={{ transform: 'scale(0.8)', color: '#07D5D8' }} />
+			),
+			location: /\/dashboard\/members\/*$/i,
+		},
+		{
+			key: 3,
+			title: 'Website',
+			icon: (
+				<LanguageIcon
+					sx={{ transform: 'scale(0.8)', color: '#06B198' }}
+				/>
+			),
+			location: /\/dashboard\/website\/*$/i,
+		},
+		{
+			key: 4,
+			title: 'Products',
+			icon: (
+				<MenuBookIcon
+					sx={{ transform: 'scale(0.8)', color: '#FF7607' }}
+				/>
+			),
+			location: /\/dashboard\/products*/i,
+			clickHandler: handleProductsAccordion,
+			state: productsAccordionOpen,
+			subItems: [
+				{
+					key: 1,
+					title: 'Courses',
+					location: /\/dashboard\/products\/courses\/*$/i,
+				},
+				{
+					key: 2,
+					title: 'Masterclass',
+					location: /\/dashboard\/products\/masterclass\/*$/i,
+				},
+				{
+					key: 3,
+					title: 'Digital Download',
+					location: /\/dashboard\/products\/digital-download\/*$/i,
+				},
+				{
+					key: 4,
+					title: 'Assesments',
+					location: /\/dashboard\/products\/assesments\/*$/i,
+				},
+				{
+					key: 5,
+					title: 'Product bundle',
+					location: /\/dashboard\/products\/product-bundle\/*$/i,
+				},
+				{
+					key: 6,
+					title: 'Community',
+					location: /\/dashboard\/products\/community\/*$/i,
+				},
+			],
+		},
+		{
+			key: 5,
+			title: 'Marketing',
+			icon: (
+				<FullscreenExitIcon
+					sx={{ transform: 'scale(0.8)', color: '#91C174' }}
+				/>
+			),
+			location: /\/dashboard\/marketing\/*$/i,
+		},
+		{
+			key: 6,
+			title: 'Sales',
+			icon: (
+				<SignalCellularAltIcon
+					sx={{ transform: 'scale(0.8)', color: '#3FB0AA' }}
+				/>
+			),
+			location: /\/dashboard\/sales\/*$/i,
+		},
+		{
+			key: 7,
+			title: 'Testimonials',
+			icon: (
+				<StarIcon sx={{ transform: 'scale(0.8)', color: '#F67E8A' }} />
+			),
+			location: /\/dashboard\/testimonials\/*$/i,
+		},
+		{
+			key: 8,
+			title: 'Settings',
+			icon: (
+				<SettingsIcon
+					sx={{ transform: 'scale(0.8)', color: '#B245FF' }}
+				/>
+			),
+			location: /\/dashboard\/settings\/*$/i,
+		},
+		{
+			key: 9,
+			title: 'Reports',
+			icon: (
+				<PieChartIcon
+					sx={{ transform: 'scale(0.8)', color: '#ABE5FF' }}
+				/>
+			),
+			location: /\/dashboard\/reports\/*$/i,
+		},
+		{
+			key: 10,
+			title: 'Apps&Integrations',
+			icon: (
+				<AppsIcon sx={{ transform: 'scale(0.8)', color: '#FCB774' }} />
+			),
+			location: /\/dashboard\/apps&intergrations\/*$/i,
+			fontSize: '0.9rem',
+		},
+	];
 
 	return (
 		// Outer Box
@@ -133,350 +269,51 @@ const DashboardTemplate = ({ children }) => {
 					}}
 				>
 					<Grid container flexDirection='column'>
-						{/* SideBar Top */}
-						<Grid item sx={{ marginTop: '5px', cursor: 'pointer' }}>
-							<Grid
-								container
-								alignItems='center'
-								sx={{
-									padding: '5px 10px',
-									backgroundColor: '#eff5fe',
-									borderRight: '4px solid #2c7bf7',
-								}}
-							>
-								<DashboardIcon
-									sx={{
-										transform: 'scale(0.8)',
-										color: '#7590FF',
-									}}
+						{/* SideBar Items*/}
+						{sidebarItems.map(item => (
+							<>
+								<SidebarItem
+									key={item.key}
+									active={
+										location.pathname.match(item.location)
+											? true
+											: false
+									}
+									clickHandler={item?.clickHandler}
+									Icon={item.icon}
+									fontSize={item?.fontSize}
+									title={item.title}
 								/>
-								<Typography>Dashboard</Typography>
-							</Grid>
-						</Grid>
-						<Grid item sx={{ marginTop: '5px', cursor: 'pointer' }}>
-							<Grid
-								container
-								alignItems='center'
-								sx={{
-									padding: '5px 10px',
-									'&:hover': {
-										backgroundColor: '#eff5fe',
-										borderRight: '4px solid #2c7bf7',
-									},
-								}}
-							>
-								<GroupIcon
-									sx={{
-										transform: 'scale(0.8)',
-										color: '#07D5D8',
-									}}
-								/>
-								<Typography>Members</Typography>
-							</Grid>
-						</Grid>
-						<Grid item sx={{ marginTop: '5px', cursor: 'pointer' }}>
-							<Grid
-								container
-								alignItems='center'
-								sx={{
-									padding: '5px 10px',
-									'&:hover': {
-										backgroundColor: '#eff5fe',
-										borderRight: '4px solid #2c7bf7',
-									},
-								}}
-							>
-								<LanguageIcon
-									sx={{
-										transform: 'scale(0.8)',
-										color: '#06B198',
-									}}
-								/>
-								<Typography>Website</Typography>
-							</Grid>
-						</Grid>
-						<Grid
-							item
-							sx={{ marginTop: '5px', cursor: 'pointer' }}
-							onClick={handleProductsAccordion}
-						>
-							<Grid
-								container
-								alignItems='center'
-								sx={{
-									padding: '5px 10px',
-									'&:hover': {
-										backgroundColor: '#eff5fe',
-										borderRight: '4px solid #2c7bf7',
-									},
-								}}
-							>
-								<MenuBookIcon
-									sx={{
-										transform: 'scale(0.8)',
-										color: '#FF7607',
-									}}
-								/>
-								<Typography>Products</Typography>
-							</Grid>
-						</Grid>
-						<Grid
-							container
-							flexDirection='column'
-							sx={{
-								overflow: 'hidden',
-								visibility: productsAccordionOpen
-									? 'visible'
-									: 'hidden',
-								height: productsAccordionOpen ? 'auto' : 0,
-								transition: 'all 1s ease',
-							}}
-						>
-							<Grid item sx={{ cursor: 'pointer' }}>
-								<Grid
-									container
-									alignItems='center'
-									sx={{
-										padding: '5px 35px',
-										'&:hover': {
-											backgroundColor: '#eff5fe',
-										},
-									}}
-								>
-									<Typography
-										sx={{
-											fontSize: '0.9rem',
-											color: '#828282',
-										}}
-									>
-										Courses
-									</Typography>
-								</Grid>
-								<Grid
-									container
-									alignItems='center'
-									sx={{
-										padding: '5px 35px',
-										'&:hover': {
-											backgroundColor: '#eff5fe',
-										},
-									}}
-								>
-									<Typography
-										sx={{
-											fontSize: '0.9rem',
-											color: '#828282',
-										}}
-									>
-										Masterclass
-									</Typography>
-								</Grid>
-								<Grid
-									container
-									alignItems='center'
-									sx={{
-										padding: '5px 35px',
-										'&:hover': {
-											backgroundColor: '#eff5fe',
-										},
-									}}
-								>
-									<Typography
-										sx={{
-											fontSize: '0.9rem',
-											color: '#828282',
-										}}
-									>
-										Digital Download
-									</Typography>
-								</Grid>
-								<Grid
-									container
-									alignItems='center'
-									sx={{
-										padding: '5px 35px',
-										'&:hover': {
-											backgroundColor: '#eff5fe',
-										},
-									}}
-								>
-									<Typography
-										sx={{
-											fontSize: '0.9rem',
-											color: '#828282',
-										}}
-									>
-										Assesments
-									</Typography>
-								</Grid>
-								<Grid
-									container
-									alignItems='center'
-									sx={{
-										padding: '5px 35px',
-										'&:hover': {
-											backgroundColor: '#eff5fe',
-										},
-									}}
-								>
-									<Typography
-										sx={{
-											fontSize: '0.9rem',
-											color: '#828282',
-										}}
-									>
-										Product Bundle
-									</Typography>
-								</Grid>
-								<Grid
-									container
-									alignItems='center'
-									sx={{
-										padding: '5px 35px',
-										'&:hover': {
-											backgroundColor: '#eff5fe',
-										},
-									}}
-								>
-									<Typography
-										sx={{
-											fontSize: '0.9rem',
-											color: '#828282',
-										}}
-									>
-										Community
-									</Typography>
-								</Grid>
-							</Grid>
-						</Grid>
-						<Grid item sx={{ marginTop: '5px', cursor: 'pointer' }}>
-							<Grid
-								container
-								alignItems='center'
-								sx={{
-									padding: '5px 10px',
-									'&:hover': {
-										backgroundColor: '#eff5fe',
-										borderRight: '4px solid #2c7bf7',
-									},
-								}}
-							>
-								<FullscreenExitIcon
-									sx={{
-										transform: 'scale(0.8)',
-										color: '#91C174',
-									}}
-								/>
-								<Typography>Marketing</Typography>
-							</Grid>
-						</Grid>
-						<Grid item sx={{ marginTop: '5px', cursor: 'pointer' }}>
-							<Grid
-								container
-								alignItems='center'
-								sx={{
-									padding: '5px 10px',
-									'&:hover': {
-										backgroundColor: '#eff5fe',
-										borderRight: '4px solid #2c7bf7',
-									},
-								}}
-							>
-								<SignalCellularAltIcon
-									sx={{
-										transform: 'scale(0.8)',
-										color: '#3FB0AA',
-									}}
-								/>
-								<Typography>Sales</Typography>
-							</Grid>
-						</Grid>
-						<Grid item sx={{ marginTop: '5px', cursor: 'pointer' }}>
-							<Grid
-								container
-								alignItems='center'
-								sx={{
-									padding: '5px 10px',
-									'&:hover': {
-										backgroundColor: '#eff5fe',
-										borderRight: '4px solid #2c7bf7',
-									},
-								}}
-							>
-								<StarIcon
-									sx={{
-										transform: 'scale(0.8)',
-										color: '#F67E8A',
-									}}
-								/>
-								<Typography>Testimonials</Typography>
-							</Grid>
-						</Grid>
-						<Grid item sx={{ marginTop: '5px', cursor: 'pointer' }}>
-							<Grid
-								container
-								alignItems='center'
-								sx={{
-									padding: '5px 10px',
-									'&:hover': {
-										backgroundColor: '#eff5fe',
-										borderRight: '4px solid #2c7bf7',
-									},
-								}}
-							>
-								<SettingsIcon
-									sx={{
-										transform: 'scale(0.8)',
-										color: '#B245FF',
-									}}
-								/>
-								<Typography>Settings</Typography>
-							</Grid>
-						</Grid>
-						<Grid item sx={{ marginTop: '5px', cursor: 'pointer' }}>
-							<Grid
-								container
-								alignItems='center'
-								sx={{
-									padding: '5px 10px',
-									'&:hover': {
-										backgroundColor: '#eff5fe',
-										borderRight: '4px solid #2c7bf7',
-									},
-								}}
-							>
-								<PieChartIcon
-									sx={{
-										transform: 'scale(0.8)',
-										color: '#ABE5FF',
-									}}
-								/>
-								<Typography>Reports</Typography>
-							</Grid>
-						</Grid>
-						<Grid item sx={{ marginTop: '5px', cursor: 'pointer' }}>
-							<Grid
-								container
-								alignItems='center'
-								sx={{
-									padding: '5px 10px',
-									'&:hover': {
-										backgroundColor: '#eff5fe',
-										borderRight: '4px solid #2c7bf7',
-									},
-								}}
-							>
-								<AppsIcon
-									sx={{
-										transform: 'scale(0.8)',
-										color: '#FCB774',
-									}}
-								/>
-								<Typography sx={{ fontSize: '0.9rem' }}>
-									Apps&Integrations
-								</Typography>
-							</Grid>
-						</Grid>
+								{item.subItems &&
+									item.subItems.map(subItem => (
+										<Grid
+											key={subItem.key}
+											container
+											flexDirection='column'
+											sx={{
+												overflow: 'hidden',
+												visibility: item.state
+													? 'visible'
+													: 'hidden',
+												height: item.state ? 'auto' : 0,
+												transition: 'all 1s ease',
+											}}
+										>
+											<Grid
+												item
+												sx={{ cursor: 'pointer' }}
+											>
+												<SidebarSubItem
+													active={location.pathname.match(
+														subItem.location
+													)}
+													title={subItem.title}
+												/>
+											</Grid>
+										</Grid>
+									))}
+							</>
+						))}
 					</Grid>
 				</Grid>
 			</Grid>
