@@ -18,31 +18,15 @@ import AppsIcon from '@mui/icons-material/Apps';
 
 import SidebarItem from '../../atoms/sidebar-item/sidebar-item.component';
 import SidebarSubItem from '../../atoms/sidebar-subitem/sidebar-subitem.component';
-import { signOutUser } from '../../../util/firebase/auth/firebase-auth.util';
+import Navbar from '../../atoms/navbar/navbar.component';
 
 const DashboardTemplate = ({ children }) => {
-	const { currentUser } = useContext(UserContext);
 	const location = useLocation();
-	// Logout Menu State
-	const [logoutMenuOpen, setLogoutMenuOpen] = useState(null);
-	const logoutMenuState = Boolean(logoutMenuOpen);
+
 	// Sidebar Collapsed State
 	const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 	// Sidebar Products Accordion State
 	const [productsAccordionOpen, setProductsAccordionOpen] = useState(false);
-
-	// Logout Menu Handler
-	const handleLogoutMenuClick = event => {
-		setLogoutMenuOpen(event.currentTarget);
-	};
-	const handleLogoutMenuClose = () => {
-		setLogoutMenuOpen(null);
-	};
-
-	// Signout Handler
-	const handleSignOut = () => {
-		signOutUser();
-	};
 
 	// Sidebar Collapsed Handler
 	const handleSidebarCollapse = () => {
@@ -213,95 +197,10 @@ const DashboardTemplate = ({ children }) => {
 			}}
 		>
 			{/* Navbar */}
-			<Grid
-				container
-				alignItems={'center'}
-				sx={{
-					height: '62px',
-					boxShadow: '0 .125rem .25rem rgba(0,0,0,.075)',
-					backgroundColor: '#fff',
-					position: 'relative',
-					zIndex: 10,
-				}}
-			>
-				<Grid
-					item
-					xs={sidebarCollapsed ? 0.8 : 2}
-					sx={{
-						padding: '0 10px',
-						maxHeight: '100%',
-						// overflow: 'hidden',
-					}}
-				>
-					{sidebarCollapsed ? (
-						<img
-							src='https://cdn.freshlms.info/freshlearn/f-logo.svg'
-							alt='logo'
-							style={{
-								position: 'relative',
-								maxWidth: '100%',
-								transform: 'scale(2)',
-								zIndex: '0',
-							}}
-						/>
-					) : (
-						<img
-							src='https://cdn.freshlms.info/freshlearn/FreshLearnLogo_136X30.svg'
-							alt='logo'
-						/>
-					)}
-				</Grid>
-				<MenuIcon
-					sx={{
-						cursor: 'pointer',
-						position: 'relative',
-						zIndex: '10',
-					}}
-					onClick={handleSidebarCollapse}
-				/>
-				<Grid
-					item
-					xs={6}
-					sx={{ padding: '0 10px', position: 'fixed', right: '0' }}
-				>
-					<Grid
-						id='nav-logout-section'
-						container
-						alignItems='center'
-						sx={{ cursor: 'pointer' }}
-						aria-controls={
-							logoutMenuState ? 'logout-menu' : undefined
-						}
-						aria-haspopup='true'
-						aria-expanded={logoutMenuState ? 'true' : undefined}
-						onClick={handleLogoutMenuClick}
-					>
-						<Grid item>
-							<Avatar alt='user' src={currentUser?.photoURL} />
-						</Grid>
-						<Grid item>
-							<ArrowDropDownIcon />
-						</Grid>
-					</Grid>
-					<Menu
-						id='logout-menu'
-						anchorEl={logoutMenuOpen}
-						open={logoutMenuState}
-						onClose={handleLogoutMenuClose}
-						MenuListProps={{
-							'aria-labelledby': 'nav-logout-section',
-						}}
-					>
-						<MenuItem onClick={handleLogoutMenuClose}>
-							Admin Settings
-						</MenuItem>
-						<MenuItem onClick={handleLogoutMenuClose}>
-							Change Password
-						</MenuItem>
-						<MenuItem onClick={handleSignOut}>Signout</MenuItem>
-					</Menu>
-				</Grid>
-			</Grid>
+			<Navbar
+				sidebarCollapsed={sidebarCollapsed}
+				sidebarCollapseHandler={handleSidebarCollapse}
+			/>
 			{/* Box Below Navbar => SideBar + Main */}
 			<Grid container sx={{ height: 'calc(100% - 62px)' }}>
 				{/* SideBar */}
