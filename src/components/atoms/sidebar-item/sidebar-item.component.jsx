@@ -1,7 +1,14 @@
 import React from 'react';
 import { Grid, Typography } from '@mui/material';
 
-const SidebarItem = ({ active, clickHandler, Icon, fontSize, title }) => {
+const SidebarItem = ({
+	active,
+	clickHandler,
+	Icon,
+	fontSize,
+	title,
+	collapsed,
+}) => {
 	return (
 		<Grid
 			item
@@ -22,9 +29,13 @@ const SidebarItem = ({ active, clickHandler, Icon, fontSize, title }) => {
 				}}
 			>
 				{Icon}
-				<Typography sx={{ fontSize: fontSize ? fontSize : 'inherit' }}>
-					{title}
-				</Typography>
+				{!collapsed && (
+					<Typography
+						sx={{ fontSize: fontSize ? fontSize : 'inherit' }}
+					>
+						{title}
+					</Typography>
+				)}
 			</Grid>
 		</Grid>
 	);

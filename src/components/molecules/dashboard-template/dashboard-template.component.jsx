@@ -26,6 +26,8 @@ const DashboardTemplate = ({ children }) => {
 	// Logout Menu State
 	const [logoutMenuOpen, setLogoutMenuOpen] = useState(null);
 	const logoutMenuState = Boolean(logoutMenuOpen);
+	// Sidebar Collapsed State
+	const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 	// Sidebar Products Accordion State
 	const [productsAccordionOpen, setProductsAccordionOpen] = useState(false);
 
@@ -42,6 +44,10 @@ const DashboardTemplate = ({ children }) => {
 		signOutUser();
 	};
 
+	// Sidebar Collapsed Handler
+	const handleSidebarCollapse = () => {
+		setSidebarCollapsed(prev => !prev);
+	};
 	// Products Accordion State Handler
 	const handleProductsAccordion = () => {
 		setProductsAccordionOpen(prev => !prev);
@@ -218,13 +224,41 @@ const DashboardTemplate = ({ children }) => {
 					zIndex: 10,
 				}}
 			>
-				<Grid item xs={2} sx={{ padding: '0 10px' }}>
-					<img
-						src='https://cdn.freshlms.info/freshlearn/FreshLearnLogo_136X30.svg'
-						alt='logo'
-					/>
+				<Grid
+					item
+					xs={sidebarCollapsed ? 0.8 : 2}
+					sx={{
+						padding: '0 10px',
+						maxHeight: '100%',
+						// overflow: 'hidden',
+					}}
+				>
+					{sidebarCollapsed ? (
+						<img
+							src='https://cdn.freshlms.info/freshlearn/f-logo.svg'
+							alt='logo'
+							style={{
+								position: 'relative',
+								maxWidth: '100%',
+								transform: 'scale(2)',
+								zIndex: '0',
+							}}
+						/>
+					) : (
+						<img
+							src='https://cdn.freshlms.info/freshlearn/FreshLearnLogo_136X30.svg'
+							alt='logo'
+						/>
+					)}
 				</Grid>
-				<MenuIcon sx={{ cursor: 'pointer' }} />
+				<MenuIcon
+					sx={{
+						cursor: 'pointer',
+						position: 'relative',
+						zIndex: '10',
+					}}
+					onClick={handleSidebarCollapse}
+				/>
 				<Grid
 					item
 					xs={6}
@@ -273,7 +307,7 @@ const DashboardTemplate = ({ children }) => {
 				{/* SideBar */}
 				<Grid
 					item
-					xs={2}
+					xs={!sidebarCollapsed ? 2 : 0.4}
 					sx={{
 						height: '100%',
 						boxShadow: '0 .125rem 1rem rgba(0,0,0,.075)',
@@ -303,13 +337,15 @@ const DashboardTemplate = ({ children }) => {
 												? true
 												: false
 										}
+										collapsed={sidebarCollapsed}
 										clickHandler={item?.clickHandler}
 										Icon={item.icon}
 										fontSize={item?.fontSize}
 										title={item.title}
 									/>
 								</Link>
-								{item.subItems &&
+								{!sidebarCollapsed &&
+									item.subItems &&
 									item.subItems.map(subItem => (
 										<Link
 											key={subItem.key}
