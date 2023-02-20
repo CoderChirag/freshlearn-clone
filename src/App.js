@@ -13,7 +13,22 @@ function App() {
 			<Route path='dashboard' element={<DashboardRoutes />}>
 				{/* <Route index element={<DashboardRoutes />} /> */}
 				<Route path='home' element={<div>Home</div>} />
-				<Route path='course' element={<div>Course</div>} />
+				<Route path='members' element={<div>Course</div>} />
+				<Route path='website' element={<div>Website</div>} />
+				<Route path='products'>
+					<Route index element={<div>Products</div>} />
+					<Route path='courses' element={<div>Courses</div>} />
+					<Route path='*' element={<div>Inside Products</div>} />
+				</Route>
+				<Route path='marketing' element={<div>Marketing</div>} />
+				<Route path='sales' element={<div>Sales</div>} />
+				<Route path='testimonials' element={<div>Testimonials</div>} />
+				<Route path='settings' element={<div>Settings</div>} />
+				<Route path='reports' element={<div>Reports</div>} />
+				<Route
+					path='apps&integrations'
+					element={<div>App & Integrations</div>}
+				/>
 			</Route>
 			<Route path='*' element={<div>404</div>} />
 		</Routes>
