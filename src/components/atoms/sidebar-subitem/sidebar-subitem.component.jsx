@@ -7,6 +7,7 @@ const SidebarSubItem = ({ active, title }) => {
 			container
 			alignItems='center'
 			sx={{
+				marginTop: '2px',
 				padding: '5px 35px',
 				backgroundColor: active ? '#eff5fe' : 'inherit',
 				'&:hover': {

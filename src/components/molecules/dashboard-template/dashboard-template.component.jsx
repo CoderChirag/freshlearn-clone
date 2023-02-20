@@ -1,5 +1,5 @@
-import React, { useContext, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useContext, useState, Fragment } from 'react';
+import { useLocation, Link } from 'react-router-dom';
 import { UserContext } from '../../../contexts/user/user.context';
 import { Box, Grid, Menu, MenuItem } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -58,6 +58,7 @@ const DashboardTemplate = ({ children }) => {
 				/>
 			),
 			location: /\/dashboard\/home\/*$/i,
+			link: '/dashboard/home',
 		},
 		{
 			key: 2,
@@ -66,6 +67,7 @@ const DashboardTemplate = ({ children }) => {
 				<GroupIcon sx={{ transform: 'scale(0.8)', color: '#07D5D8' }} />
 			),
 			location: /\/dashboard\/members\/*$/i,
+			link: '/dashboard/members',
 		},
 		{
 			key: 3,
@@ -76,6 +78,7 @@ const DashboardTemplate = ({ children }) => {
 				/>
 			),
 			location: /\/dashboard\/website\/*$/i,
+			link: '/dashboard/website',
 		},
 		{
 			key: 4,
@@ -86,6 +89,7 @@ const DashboardTemplate = ({ children }) => {
 				/>
 			),
 			location: /\/dashboard\/products*/i,
+			link: '/dashboard/products',
 			clickHandler: handleProductsAccordion,
 			state: productsAccordionOpen,
 			subItems: [
@@ -93,31 +97,37 @@ const DashboardTemplate = ({ children }) => {
 					key: 1,
 					title: 'Courses',
 					location: /\/dashboard\/products\/courses\/*$/i,
+					link: '/dashboard/products/courses',
 				},
 				{
 					key: 2,
 					title: 'Masterclass',
 					location: /\/dashboard\/products\/masterclass\/*$/i,
+					link: '/dashboard/products/masterclass',
 				},
 				{
 					key: 3,
 					title: 'Digital Download',
 					location: /\/dashboard\/products\/digital-download\/*$/i,
+					link: '/dashboard/products/digital-download',
 				},
 				{
 					key: 4,
 					title: 'Assesments',
 					location: /\/dashboard\/products\/assesments\/*$/i,
+					link: '/dashboard/products/assesments',
 				},
 				{
 					key: 5,
 					title: 'Product bundle',
 					location: /\/dashboard\/products\/product-bundle\/*$/i,
+					link: '/dashboard/products/product-bundle',
 				},
 				{
 					key: 6,
 					title: 'Community',
 					location: /\/dashboard\/products\/community\/*$/i,
+					link: '/dashboard/products/community',
 				},
 			],
 		},
@@ -130,6 +140,7 @@ const DashboardTemplate = ({ children }) => {
 				/>
 			),
 			location: /\/dashboard\/marketing\/*$/i,
+			link: '/dashboard/marketing',
 		},
 		{
 			key: 6,
@@ -140,6 +151,7 @@ const DashboardTemplate = ({ children }) => {
 				/>
 			),
 			location: /\/dashboard\/sales\/*$/i,
+			link: '/dashboard/sales',
 		},
 		{
 			key: 7,
@@ -148,6 +160,7 @@ const DashboardTemplate = ({ children }) => {
 				<StarIcon sx={{ transform: 'scale(0.8)', color: '#F67E8A' }} />
 			),
 			location: /\/dashboard\/testimonials\/*$/i,
+			link: '/dashboard/testimonials',
 		},
 		{
 			key: 8,
@@ -158,6 +171,7 @@ const DashboardTemplate = ({ children }) => {
 				/>
 			),
 			location: /\/dashboard\/settings\/*$/i,
+			link: '/dashboard/settings',
 		},
 		{
 			key: 9,
@@ -168,6 +182,7 @@ const DashboardTemplate = ({ children }) => {
 				/>
 			),
 			location: /\/dashboard\/reports\/*$/i,
+			link: '/dashboard/reports',
 		},
 		{
 			key: 10,
@@ -176,6 +191,7 @@ const DashboardTemplate = ({ children }) => {
 				<AppsIcon sx={{ transform: 'scale(0.8)', color: '#FCB774' }} />
 			),
 			location: /\/dashboard\/apps&intergrations\/*$/i,
+			link: '/dashboard/apps&integrations',
 			fontSize: '0.9rem',
 		},
 	];
@@ -271,50 +287,72 @@ const DashboardTemplate = ({ children }) => {
 					<Grid container flexDirection='column'>
 						{/* SideBar Items*/}
 						{sidebarItems.map(item => (
-							<>
-								<SidebarItem
-									key={item.key}
-									active={
-										location.pathname.match(item.location)
-											? true
-											: false
-									}
-									clickHandler={item?.clickHandler}
-									Icon={item.icon}
-									fontSize={item?.fontSize}
-									title={item.title}
-								/>
+							<Fragment key={item.key}>
+								<Link
+									to={item.link}
+									style={{
+										color: 'unset',
+										textDecoration: 'none',
+									}}
+								>
+									<SidebarItem
+										active={
+											location.pathname.match(
+												item.location
+											)
+												? true
+												: false
+										}
+										clickHandler={item?.clickHandler}
+										Icon={item.icon}
+										fontSize={item?.fontSize}
+										title={item.title}
+									/>
+								</Link>
 								{item.subItems &&
 									item.subItems.map(subItem => (
-										<Grid
+										<Link
 											key={subItem.key}
-											container
-											flexDirection='column'
-											sx={{
-												overflow: 'hidden',
-												visibility: item.state
-													? 'visible'
-													: 'hidden',
-												height: item.state ? 'auto' : 0,
-												transition: 'all 1s ease',
+											to={subItem.link}
+											style={{
+												color: 'unset',
+												textDecoration: 'none',
 											}}
 										>
 											<Grid
-												item
-												sx={{ cursor: 'pointer' }}
+												container
+												flexDirection='column'
+												sx={{
+													overflow: 'hidden',
+													visibility: item.state
+														? 'visible'
+														: 'hidden',
+													height: item.state
+														? 'auto'
+														: 0,
+													transition: 'all 1s ease',
+												}}
 											>
-												<SidebarSubItem
-													active={location.pathname.match(
-														subItem.location
-													)}
-													title={subItem.title}
-												/>
+												<Grid
+													item
+													sx={{ cursor: 'pointer' }}
+												>
+													<SidebarSubItem
+														active={location.pathname.match(
+															subItem.location
+														)}
+														title={subItem.title}
+													/>
+												</Grid>
 											</Grid>
-										</Grid>
+										</Link>
 									))}
-							</>
+							</Fragment>
 						))}
 					</Grid>
+				</Grid>
+				<Grid item xs={10} sx={{ height: '100%' }}>
+					{children}
 				</Grid>
 			</Grid>
 		</Box>
