@@ -81,6 +81,20 @@ export const CoursesProvider = ({ children }) => {
 		[dispatch]
 	);
 
+	const setCoursesDataFromStorage = useMemo(
+		() => () => {
+			if (
+				state.courses.length === 0 &&
+				window.localStorage.getItem('courses')
+			) {
+				setAllCoursesData(
+					JSON.parse(window.localStorage.getItem('courses'))
+				);
+			}
+		},
+		[state.courses.length, setAllCoursesData]
+	);
+
 	useEffect(() => {
 		const unsubscribe = onAuthStateChange(user => {
 			if (!user) {
@@ -102,6 +116,7 @@ export const CoursesProvider = ({ children }) => {
 				setAllCoursesData,
 				createNewCourse,
 				clearCourses,
+				setCoursesDataFromStorage,
 			}}
 		>
 			{children}

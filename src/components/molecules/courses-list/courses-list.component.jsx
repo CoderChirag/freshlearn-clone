@@ -53,7 +53,7 @@ const CoursesList = () => {
 									sx={{ width: '28%', cursor: 'pointer' }}
 								>
 									<Link
-										to={`/dashboard/products/courses/${course.id}`}
+										to={`/dashboard/products/courses/${course.id}/curriculum`}
 										style={{ textDecoration: 'none' }}
 									>
 										<CustomPaper elevation={8}>
