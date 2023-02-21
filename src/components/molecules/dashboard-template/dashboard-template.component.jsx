@@ -1,10 +1,6 @@
-import React, { useContext, useState, Fragment } from 'react';
+import React, { useState, Fragment } from 'react';
 import { useLocation, Link } from 'react-router-dom';
-import { UserContext } from '../../../contexts/user/user.context';
-import { Box, Grid, Menu, MenuItem } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
-import Avatar from '@mui/material/Avatar';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import { Box, Grid } from '@mui/material';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import GroupIcon from '@mui/icons-material/Group';
 import LanguageIcon from '@mui/icons-material/Language';
@@ -87,8 +83,7 @@ const DashboardTemplate = ({ children }) => {
 				{
 					key: 1,
 					title: 'Courses',
-					location:
-						/\/dashboard\/products\/courses\/courses-list\/*$/i,
+					location: /\/dashboard\/products\/courses\/*/i,
 					link: '/dashboard/products/courses/courses-list',
 				},
 				{

@@ -1,8 +1,12 @@
-import React, { useState } from 'react';
+import React, { useContext } from 'react';
 import { Grid, Typography, Button } from '@mui/material';
 
+import { CoursesContext } from '../../../contexts/courses/courses.context';
+import { Link } from 'react-router-dom';
+
 const CoursesList = () => {
-	const [courses, setCourses] = useState([]);
+	// We  can fetch the courses data from backend here using a useEffect hook and then update it to courses context using setAllCoursesData method of the context.
+	const { courses } = useContext(CoursesContext);
 
 	return (
 		<>
@@ -34,9 +38,14 @@ const CoursesList = () => {
 								/>
 							</Grid>
 							<Grid item>
-								<Button variant='contained'>
-									Create Course
-								</Button>
+								<Link
+									to='/dashboard/products/courses/add-course'
+									style={{ textDecoration: 'none' }}
+								>
+									<Button variant='contained'>
+										Create Course
+									</Button>
+								</Link>
 							</Grid>
 						</Grid>
 					)}

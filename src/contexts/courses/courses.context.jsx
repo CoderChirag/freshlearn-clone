@@ -10,6 +10,11 @@ export const CoursesContext = createContext({
 const coursesReducer = (state, action) => {
 	const { type, payload } = action;
 	switch (type) {
+		case COURSES_ACTION_TYPES.SET_ALL_COURSES_DATA:
+			return {
+				...state,
+				courses: payload,
+			};
 		case COURSES_ACTION_TYPES.CREATE_NEW_COURSE:
 			return {
 				...state,
@@ -18,7 +23,7 @@ const coursesReducer = (state, action) => {
 		case COURSES_ACTION_TYPES.CLEAR_COURSES:
 			return {
 				...state,
-				courses: payload,
+				courses: [],
 			};
 		default:
 			throw new Error(`Unhandled action type: ${type} in coursesReducer`);
@@ -32,12 +37,13 @@ const INITIAL_STATE = {
 export const CoursesProvider = ({ children }) => {
 	const [state, dispatch] = useReducer(coursesReducer, INITIAL_STATE);
 
-	const clearCourses = useMemo(
-		() => () =>
+	const setAllCoursesData = useMemo(
+		() => courses => {
 			dispatch({
-				type: COURSES_ACTION_TYPES.CLEAR_COURSES,
-				payload: [],
-			}),
+				type: COURSES_ACTION_TYPES.SET_ALL_COURSES_DATA,
+				payload: courses,
+			});
+		},
 		[dispatch]
 	);
 
@@ -48,6 +54,15 @@ export const CoursesProvider = ({ children }) => {
 				payload: course,
 			});
 		},
+		[dispatch]
+	);
+
+	const clearCourses = useMemo(
+		() => () =>
+			dispatch({
+				type: COURSES_ACTION_TYPES.CLEAR_COURSES,
+				payload: [],
+			}),
 		[dispatch]
 	);
 
@@ -63,7 +78,12 @@ export const CoursesProvider = ({ children }) => {
 
 	return (
 		<CoursesContext.Provider
-			value={{ ...state, clearCourses, createNewCourse }}
+			value={{
+				...state,
+				setAllCoursesData,
+				createNewCourse,
+				clearCourses,
+			}}
 		>
 			{children}
 		</CoursesContext.Provider>

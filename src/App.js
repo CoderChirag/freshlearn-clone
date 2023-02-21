@@ -1,12 +1,11 @@
 import React from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 
 import Root from './components/organisms/root.component';
 import AuthRoutes from './routes/auth/auth.routes';
 import DashboardRoutes from './routes/dashboard/dashboard.routes';
 import CoursesList from './components/molecules/courses-list/courses-list.component';
-
-import { CoursesProvider } from './contexts/courses/courses.context';
+import AddCourse from './components/molecules/add-course/add-course.component';
 
 function App() {
 	return (
@@ -24,7 +23,21 @@ function App() {
 						path='courses/courses-list'
 						element={<CoursesList />}
 					/>
-					<Route path='*' element={<div>Inside Products</div>} />
+					<Route path='courses/add-course' element={<AddCourse />} />
+					<Route
+						path='masterclass'
+						element={<div>Masterclass</div>}
+					/>
+					<Route
+						path='digital-download'
+						element={<div>Digital Download</div>}
+					/>
+					<Route path='assesments' element={<div>Assesments</div>} />
+					<Route
+						path='product-bundle'
+						element={<div>Product Bundle</div>}
+					/>
+					<Route path='community' element={<div>Community</div>} />
 				</Route>
 				<Route path='marketing' element={<div>Marketing</div>} />
 				<Route path='sales' element={<div>Sales</div>} />
