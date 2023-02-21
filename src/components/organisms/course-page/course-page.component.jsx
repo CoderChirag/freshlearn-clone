@@ -7,6 +7,10 @@ import { CoursesContext } from '../../../contexts/courses/courses.context';
 import TabsComponent from '../../molecules/tabs/tabs.component';
 import Curriculum from '../../molecules/curriculum/curriculum.component';
 
+const TabSection = ({ title }) => {
+	return <div>{title}</div>;
+};
+
 const CoursePage = () => {
 	const { courses, setCoursesDataFromStorage } = useContext(CoursesContext);
 	const location = useLocation();
@@ -29,35 +33,35 @@ const CoursePage = () => {
 			title: 'Pricing',
 			location: /\/courses\/[0-9]+\/pricing\/*$/i,
 			link: `/dashboard/products/courses/${courseId}/pricing`,
-			component: <Curriculum title='Pricing' />,
+			component: <TabSection title='Pricing' />,
 		},
 		{
 			key: 2,
 			title: 'Pages',
 			location: /\/courses\/[0-9]+\/pages\/*$/i,
 			link: `/dashboard/products/courses/${courseId}/pages`,
-			component: <Curriculum title='Pages' />,
+			component: <TabSection title='Pages' />,
 		},
 		{
 			key: 3,
 			title: 'Drip',
 			location: /\/courses\/[0-9]+\/drip\/*$/i,
 			link: `/dashboard/products/courses/${courseId}/drip`,
-			component: <Curriculum title='Drip' />,
+			component: <TabSection title='Drip' />,
 		},
 		{
 			key: 4,
 			title: 'Certificate',
 			location: /\/courses\/[0-9]+\/certificate\/*$/i,
 			link: `/dashboard/products/courses/${courseId}/certificate`,
-			component: <Curriculum title='Certificate' />,
+			component: <TabSection title='Certificate' />,
 		},
 		{
 			key: 5,
 			title: 'Gamification',
 			location: /\/courses\/[0-9]+\/gamification\/*$/i,
 			link: `/dashboard/products/courses/${courseId}/gamification`,
-			component: <Curriculum title='Gamification' />,
+			component: <TabSection title='Gamification' />,
 		},
 	];
 
@@ -75,10 +79,17 @@ const CoursePage = () => {
 	}, [courseId, courses]);
 
 	return (
-		<Grid container flexDirection='column'>
-			<CourseIdBar title={course?.title} id={course?.id} />
+		<Grid
+			container
+			flexDirection='column'
+			sx={{ width: '100%', height: '100%' }}
+		>
+			<CourseIdBar
+				title={course?.title}
+				id={course?.id}
+				sx={{ height: '10%' }}
+			/>
 			<Paper elevation={4} sx={{ marginTop: '10px' }}></Paper>
-			{console.log(location.pathname.split('/'))}
 			<TabsComponent
 				tabs={tabs}
 				active={

@@ -198,7 +198,7 @@ const AddCourse = () => {
 			sx={{ height: '100%', paddingTop: '30px' }}
 		>
 			<Grid item sx={{ width: '45%' }}>
-				<CustomizedPaper elevation={8}>
+				<CustomizedPaper elevation={8} sx={{ marginBottom: '30px' }}>
 					<Grid container flexDirection='column'>
 						<Grid
 							item

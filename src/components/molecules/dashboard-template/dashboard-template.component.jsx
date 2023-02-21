@@ -291,9 +291,9 @@ const DashboardTemplate = ({ children }) => {
 						height: '100%',
 						overflowY: 'auto',
 						overflowX: 'hidden',
-						paddingLeft: '30px',
+						paddingLeft: '10px',
 						paddingTop: '15px',
-						paddingRight: '30px',
+						paddingRight: '10px',
 						paddingBottom: '30px',
 					}}
 				>

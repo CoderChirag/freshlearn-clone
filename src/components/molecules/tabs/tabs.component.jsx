@@ -42,8 +42,12 @@ export default function TabsComponent({ tabs, active }) {
 	};
 
 	return (
-		<Box sx={{ width: '100%' }}>
-			<Paper sx={{ borderBottom: 1, borderColor: 'divider' }}>
+		// <div style={{ width: '100%', height: '82%' }}>
+		<Box sx={{ width: '100%', height: '82%' }}>
+			<Paper
+				// elevation={8}
+				sx={{ borderBottom: 1, borderColor: 'divider' }}
+			>
 				<Tabs
 					value={value}
 					onChange={handleChange}
@@ -65,10 +69,16 @@ export default function TabsComponent({ tabs, active }) {
 				</Tabs>
 			</Paper>
 			{tabs.map(tab => (
-				<TabPanel key={tab.key} value={value} index={tab.key}>
+				<TabPanel
+					key={tab.key}
+					value={value}
+					index={tab.key}
+					style={{ height: '100%' }}
+				>
 					{tab.component}
 				</TabPanel>
 			))}
 		</Box>
+		// </div>
 	);
 }
