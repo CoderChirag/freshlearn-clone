@@ -1,6 +1,5 @@
 import React, { Fragment, useState, useContext, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { v4 as uuidv4 } from 'uuid';
 import { Grid, Paper, Typography, Button, TextField, Box } from '@mui/material';
 import KeyboardArrowDownOutlinedIcon from '@mui/icons-material/KeyboardArrowDownOutlined';
 import KeyboardArrowUpOutlinedIcon from '@mui/icons-material/KeyboardArrowUpOutlined';
@@ -8,6 +7,8 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import DoneOutlinedIcon from '@mui/icons-material/DoneOutlined';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 
+import { useModuleControls } from './useModuleControls.hook';
+import { useChapterControls } from './useChapterControls.hook';
 import { CoursesContext } from '../../../contexts/courses/courses.context';
 
 const ModuleConfigurator = () => {
@@ -18,123 +19,28 @@ const ModuleConfigurator = () => {
 
 	// Current Course State
 	const [course, setCourse] = useState(null);
-	// State for Add Modules Input
-	const [addModuleInputState, setAddModuleInputState] = useState({
-		visible: false,
-		input: '',
-	});
-	// State for Chapters visibility
-	const [chaptersVisible, setChaptersVisible] = useState({});
-	// State for Add Chapter Input
-	const [addChapterInputState, setaddChapterInputState] = useState({});
+	// Module Controls
+	const {
+		toggleAddModuleInputVisibility,
+		handleAddModuleInputChange,
+		addModuleInputState,
+		handleAddModule,
+	} = useModuleControls(course, courseId, addNewModule);
+
+	// Chapter Controls
+	const {
+		toggleChaptersVisibility,
+		chaptersVisible,
+		toggleAddChapterInputVisibility,
+		handleAddChapterInputChange,
+		addChapterInputState,
+		handleAddChapter,
+	} = useChapterControls(course, courseId, addNewChapter);
 
 	// Get current course data
 	useEffect(() => {
 		setCourse(courses.find(course => course.id === courseId));
 	}, [setCourse, courses, courseId]);
-
-	// Add Module Input State Handlers
-	const toggleAddModuleInputVisibility = () => {
-		setAddModuleInputState(prev => ({
-			visible: !prev.visible,
-			input: prev.input,
-		}));
-	};
-	const handleAddModuleInputChange = e => {
-		setAddModuleInputState({
-			visible: true,
-			input: e.target.value,
-		});
-	};
-	useEffect(() => {
-		if (!addModuleInputState.visible) {
-			setAddModuleInputState({ visible: false, input: '' });
-		}
-	}, [addModuleInputState.visible]);
-
-	// Chapters visibility handler
-	const toggleChaptersVisibility = moduleId => {
-		setChaptersVisible({
-			...chaptersVisible,
-			[moduleId]: !chaptersVisible[moduleId],
-		});
-		if (
-			chaptersVisible[moduleId] &&
-			addChapterInputState[moduleId]?.inputVisibility
-		) {
-			toggleAddChapterInputVisibility(moduleId);
-		}
-	};
-
-	// Add Chapter Input state handlers
-	const toggleAddChapterInputVisibility = moduleId => {
-		setaddChapterInputState({
-			...addChapterInputState,
-			[moduleId]: {
-				inputVisibility:
-					!addChapterInputState[moduleId]?.inputVisibility,
-				input: addChapterInputState[moduleId]?.input || '',
-			},
-		});
-	};
-	const handleAddChapterInputChange = (moduleId, e) => {
-		setaddChapterInputState({
-			...addChapterInputState,
-			[moduleId]: {
-				inputVisibility:
-					addChapterInputState[moduleId]?.inputVisibility,
-				input: e.target.value,
-			},
-		});
-	};
-	const clearAddChapterInputs = () => {
-		setaddChapterInputState(prev => {
-			const newState = {};
-			Object.keys(prev).forEach(key => {
-				newState[key] = {
-					inputVisibility: false,
-					input: '',
-				};
-			});
-			return newState;
-		});
-	};
-	// Clearing the input field when the course changes
-	useEffect(() => {
-		clearAddChapterInputs();
-	}, [course]);
-
-	// Submit handlers
-
-	// Handler for adding new module
-	// Here we can put our post request to the server
-	const handleAddModule = () => {
-		const newModule = {
-			id: uuidv4(),
-			title: addModuleInputState.input,
-			chapters: [
-				{
-					id: uuidv4(),
-					title: 'Chapter 1',
-				},
-			],
-		};
-		console.log(newModule);
-		addNewModule(courseId, newModule);
-		setAddModuleInputState({ visible: false, input: '' });
-	};
-
-	// Handler for adding new chapter
-	// Here we can put our post request to the server
-	const handleAddChapter = moduleId => {
-		const newChapter = {
-			id: uuidv4(),
-			title: addChapterInputState[moduleId].input,
-		};
-		console.log(newChapter);
-		addNewChapter(courseId, moduleId, newChapter);
-		toggleAddChapterInputVisibility(moduleId);
-	};
 
 	return (
 		<Grid
@@ -144,8 +50,6 @@ const ModuleConfigurator = () => {
 				height: '100%',
 				overflowX: 'hidden',
 				overflowY: 'auto',
-				// boxShadow:
-				// 	'0px 2px 4px -1px rgb(0 0 0 / 20%), 0px 4px 5px 0px rgb(0 0 0 / 14%), 0px 1px 10px 0px rgb(0 0 0 / 12%)',
 			}}
 		>
 			{course?.modules.map(module => (
