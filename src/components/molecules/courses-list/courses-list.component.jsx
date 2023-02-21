@@ -23,73 +23,95 @@ const CoursesList = () => {
 	return (
 		<>
 			<Grid container flexDirection='column'>
-				<Grid item>
+				<Grid
+					item
+					sx={{
+						display: 'flex',
+						justifyContent: 'space-between',
+					}}
+				>
 					<Typography
 						variant='h5'
 						sx={{ fontWeight: '600', minHeight: '5vh' }}
 					>
 						Courses
 					</Typography>
+					<Link
+						to='/dashboard/products/courses/add-course'
+						style={{ textDecoration: 'none' }}
+					>
+						<Button variant='contained'>Create Course</Button>
+					</Link>
 				</Grid>
 				<Grid item sx={{ minHeight: '80vh' }}>
 					{courses.length > 0 ? (
 						<Grid container sx={{ paddingRight: '30px' }}>
 							{courses.map(course => (
 								<Grid
+									key={course.id}
 									item
 									sx={{ width: '28%', cursor: 'pointer' }}
 								>
-									<CustomPaper elevation={8}>
-										<Box
-											sx={{
-												width: '100%',
-												height: '25vh',
-												backgroundImage: `url('https://mdbootstrap.com/img/Photos/Others/images/43.jpg')`,
-												backgroundRepeat: 'no-repeat',
-												backgroundSize: 'cover',
-												backgroundPosition: 'center',
-												borderTopLeftRadius: '5px',
-												borderTopRightRadius: '5px',
-											}}
-										></Box>
-										<Box
-											sx={{
-												overflow: 'hidden',
-												width: '100%',
-												minHeight: '25vh',
-												maxHeight: '50vh',
-												padding: '10px 20px',
-											}}
-										>
-											<Typography variant='h6'>
-												gdghgdh
-											</Typography>
-											<Typography>dhdhsdgddgh</Typography>
-											<Grid
-												container
-												justifyContent='space-between'
-												sx={{ marginTop: '25px' }}
+									<Link
+										to={`/dashboard/products/courses/${course.id}`}
+										style={{ textDecoration: 'none' }}
+									>
+										<CustomPaper elevation={8}>
+											<Box
+												sx={{
+													width: '100%',
+													height: '25vh',
+													backgroundImage: `url('https://mdbootstrap.com/img/Photos/Others/images/43.jpg')`,
+													backgroundRepeat:
+														'no-repeat',
+													backgroundSize: 'cover',
+													backgroundPosition:
+														'center',
+													borderTopLeftRadius: '5px',
+													borderTopRightRadius: '5px',
+												}}
+											></Box>
+											<Box
+												sx={{
+													overflow: 'hidden',
+													width: '100%',
+													minHeight: '25vh',
+													maxHeight: '50vh',
+													padding: '10px 20px',
+												}}
 											>
-												<Grid item>
-													<Avatar
-														sx={{
-															backgroundColor:
-																'#2C3E50',
-															width: 32,
-															height: 32,
-														}}
-													>
-														C
-													</Avatar>
+												<Typography variant='h6'>
+													{course.title}
+												</Typography>
+												<Typography variant='p'>
+													{course.description}
+												</Typography>
+												<Grid
+													container
+													justifyContent='space-between'
+													sx={{ marginTop: '25px' }}
+												>
+													<Grid item>
+														<Avatar
+															sx={{
+																backgroundColor:
+																	'#2C3E50',
+																width: 32,
+																height: 32,
+															}}
+														>
+															{course.author[0].toUpperCase()}
+														</Avatar>
+													</Grid>
+													<Grid item>
+														<Typography variant='h6'>
+															FREE
+														</Typography>
+													</Grid>
 												</Grid>
-												<Grid item>
-													<Typography variant='h6'>
-														FREE
-													</Typography>
-												</Grid>
-											</Grid>
-										</Box>
-									</CustomPaper>
+											</Box>
+										</CustomPaper>
+									</Link>
 								</Grid>
 							))}
 						</Grid>

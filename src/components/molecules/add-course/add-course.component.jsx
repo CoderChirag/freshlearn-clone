@@ -1,5 +1,6 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
 import {
 	Grid,
 	Paper,
@@ -41,9 +42,11 @@ const MenuProps = {
 const AddCourse = () => {
 	const navigate = useNavigate();
 	const { currentUser } = useContext(UserContext);
-	const { courses, createNewCourse } = useContext(CoursesContext);
+	const { createNewCourse } = useContext(CoursesContext);
 
 	// Form States
+	// Submission state
+	const [submitted, setSubmitted] = useState(false);
 	// Course title
 	const [title, setTitle] = useState('');
 	// Course description
@@ -157,15 +160,18 @@ const AddCourse = () => {
 	const handleSubmit = event => {
 		if (validateForm(true, true, true)) return;
 		const course = {
+			id: uuidv4(),
 			title,
 			description,
 			author,
 			visibility,
 			modules: [
 				{
+					id: uuidv4(),
 					title: 'Module 1',
 					chapters: [
 						{
+							id: uuidv4(),
 							title: 'Chapter 1',
 						},
 					],
@@ -173,18 +179,23 @@ const AddCourse = () => {
 			],
 		};
 		console.log(course); // Here we can make a post request to send the generated data to backend
-		createNewCourse(course, () =>
-			navigate('/dashboard/products/courses/courses-list')
-		);
-		// navigate('/dashboard/products/courses/courses-list');
+		createNewCourse(course);
+		setSubmitted(true);
 	};
+
+	// To redirect after submission
+	useEffect(() => {
+		if (submitted) {
+			navigate('/dashboard/products/courses/courses-list');
+		}
+	}, [submitted, navigate]);
 
 	return (
 		<Grid
 			container
 			flexDirection='column'
 			alignItems='center'
-			sx={{ height: '100%', paddingTop: '30px', paddingRight: '30px' }}
+			sx={{ height: '100%', paddingTop: '30px' }}
 		>
 			<Grid item sx={{ width: '45%' }}>
 				<CustomizedPaper elevation={8}>

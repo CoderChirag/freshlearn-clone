@@ -293,6 +293,8 @@ const DashboardTemplate = ({ children }) => {
 						overflowX: 'hidden',
 						paddingLeft: '30px',
 						paddingTop: '15px',
+						paddingRight: '30px',
+						paddingBottom: '30px',
 					}}
 				>
 					{children}

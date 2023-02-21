@@ -48,12 +48,11 @@ export const CoursesProvider = ({ children }) => {
 	);
 
 	const createNewCourse = useMemo(
-		() => (course, callback) => {
+		() => course => {
 			dispatch({
 				type: COURSES_ACTION_TYPES.CREATE_NEW_COURSE,
 				payload: course,
 			});
-			callback();
 		},
 		[dispatch]
 	);
