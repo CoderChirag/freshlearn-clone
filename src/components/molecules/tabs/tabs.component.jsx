@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Tabs, Tab, Box, Paper } from '@mui/material';
 
@@ -32,7 +33,9 @@ function a11yProps(index) {
 }
 
 export default function TabsComponent({ tabs, active }) {
-	const [value, setValue] = React.useState(0);
+	const navigate = useNavigate();
+
+	const [value, setValue] = React.useState(active);
 
 	const handleChange = (event, newValue) => {
 		setValue(newValue);
@@ -54,21 +57,18 @@ export default function TabsComponent({ tabs, active }) {
 					{tabs.map(tab => (
 						<Tab
 							key={tab.key}
-							label={`${tab.key}. ${tab.title}`}
+							label={`${tab.key + 1}. ${tab.title}`}
 							{...a11yProps(tab.key)}
+							onClick={() => navigate(tab.link)}
 						/>
 					))}
 				</Tabs>
 			</Paper>
-			<TabPanel value={value} index={0}>
-				Item One
-			</TabPanel>
-			<TabPanel value={value} index={1}>
-				Item Two
-			</TabPanel>
-			<TabPanel value={value} index={2}>
-				Item Three
-			</TabPanel>
+			{tabs.map(tab => (
+				<TabPanel key={tab.key} value={value} index={tab.key}>
+					{tab.component}
+				</TabPanel>
+			))}
 		</Box>
 	);
 }
