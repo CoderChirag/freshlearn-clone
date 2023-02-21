@@ -4,6 +4,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import Root from './components/organisms/root.component';
 import AuthRoutes from './routes/auth/auth.routes';
 import DashboardRoutes from './routes/dashboard/dashboard.routes';
+import CoursesList from './components/molecules/courses-list/courses-list.component';
 
 function App() {
 	return (
@@ -17,7 +18,10 @@ function App() {
 				<Route path='website' element={<div>Website</div>} />
 				<Route path='products'>
 					<Route index element={<div>Products</div>} />
-					<Route path='courses' element={<div>Courses</div>} />
+					<Route
+						path='courses/courses-list'
+						element={<CoursesList />}
+					/>
 					<Route path='*' element={<div>Inside Products</div>} />
 				</Route>
 				<Route path='marketing' element={<div>Marketing</div>} />

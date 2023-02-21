@@ -79,15 +79,16 @@ const DashboardTemplate = ({ children }) => {
 				/>
 			),
 			location: /\/dashboard\/products*/i,
-			link: '/dashboard/products',
+			link: '#',
 			clickHandler: handleProductsAccordion,
 			state: productsAccordionOpen,
 			subItems: [
 				{
 					key: 1,
 					title: 'Courses',
-					location: /\/dashboard\/products\/courses\/*$/i,
-					link: '/dashboard/products/courses',
+					location:
+						/\/dashboard\/products\/courses\/courses-list\/*$/i,
+					link: '/dashboard/products/courses/courses-list',
 				},
 				{
 					key: 2,
@@ -286,7 +287,18 @@ const DashboardTemplate = ({ children }) => {
 						))}
 					</Grid>
 				</Grid>
-				<Grid item xs={10} sx={{ height: '100%' }}>
+				{/* Main */}
+				<Grid
+					item
+					xs={10}
+					sx={{
+						height: '100%',
+						overflowY: 'auto',
+						overflowX: 'hidden',
+						paddingLeft: '30px',
+						paddingTop: '15px',
+					}}
+				>
 					{children}
 				</Grid>
 			</Grid>
