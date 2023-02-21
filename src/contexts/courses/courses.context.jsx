@@ -25,6 +25,30 @@ const coursesReducer = (state, action) => {
 				...state,
 				courses: [],
 			};
+		case COURSES_ACTION_TYPES.ADD_NEW_CHAPTER:
+			return {
+				...state,
+				courses: state.courses.map(course => {
+					if (course.id === payload.courseId) {
+						return {
+							...course,
+							modules: course.modules.map(module => {
+								if (module.id === payload.moduleId) {
+									return {
+										...module,
+										chapters: [
+											...module.chapters,
+											payload.chapter,
+										],
+									};
+								}
+								return module;
+							}),
+						};
+					}
+					return course;
+				}),
+			};
 		default:
 			throw new Error(`Unhandled action type: ${type} in coursesReducer`);
 	}
@@ -95,6 +119,20 @@ export const CoursesProvider = ({ children }) => {
 		[state.courses.length, setAllCoursesData]
 	);
 
+	const addNewChapter = useMemo(
+		() => (courseId, moduleId, chapter) => {
+			dispatch({
+				type: COURSES_ACTION_TYPES.ADD_NEW_CHAPTER,
+				payload: {
+					courseId,
+					moduleId,
+					chapter,
+				},
+			});
+		},
+		[dispatch]
+	);
+
 	useEffect(() => {
 		const unsubscribe = onAuthStateChange(user => {
 			if (!user) {
@@ -117,6 +155,7 @@ export const CoursesProvider = ({ children }) => {
 				createNewCourse,
 				clearCourses,
 				setCoursesDataFromStorage,
+				addNewChapter,
 			}}
 		>
 			{children}
