@@ -25,6 +25,19 @@ const coursesReducer = (state, action) => {
 				...state,
 				courses: [],
 			};
+		case COURSES_ACTION_TYPES.ADD_NEW_MODULE:
+			return {
+				...state,
+				courses: state.courses.map(course => {
+					if (course.id === payload.courseId) {
+						return {
+							...course,
+							modules: [...course.modules, payload.module],
+						};
+					}
+					return course;
+				}),
+			};
 		case COURSES_ACTION_TYPES.ADD_NEW_CHAPTER:
 			return {
 				...state,
@@ -119,6 +132,19 @@ export const CoursesProvider = ({ children }) => {
 		[state.courses.length, setAllCoursesData]
 	);
 
+	const addNewModule = useMemo(
+		() => (courseId, module) => {
+			dispatch({
+				type: COURSES_ACTION_TYPES.ADD_NEW_MODULE,
+				payload: {
+					courseId,
+					module,
+				},
+			});
+		},
+		[dispatch]
+	);
+
 	const addNewChapter = useMemo(
 		() => (courseId, moduleId, chapter) => {
 			dispatch({
@@ -132,6 +158,15 @@ export const CoursesProvider = ({ children }) => {
 		},
 		[dispatch]
 	);
+
+	useEffect(() => {
+		if (state.courses.length > 0) {
+			window.localStorage.setItem(
+				'courses',
+				JSON.stringify(state.courses)
+			);
+		}
+	}, [state]);
 
 	useEffect(() => {
 		const unsubscribe = onAuthStateChange(user => {
@@ -155,6 +190,7 @@ export const CoursesProvider = ({ children }) => {
 				createNewCourse,
 				clearCourses,
 				setCoursesDataFromStorage,
+				addNewModule,
 				addNewChapter,
 			}}
 		>
