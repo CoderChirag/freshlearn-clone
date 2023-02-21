@@ -172,9 +172,11 @@ const AddCourse = () => {
 				},
 			],
 		};
-		createNewCourse(course);
 		console.log(course); // Here we can make a post request to send the generated data to backend
-		navigate('/dashboard/products/courses/courses-list');
+		createNewCourse(course, () =>
+			navigate('/dashboard/products/courses/courses-list')
+		);
+		// navigate('/dashboard/products/courses/courses-list');
 	};
 
 	return (

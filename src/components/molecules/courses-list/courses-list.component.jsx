@@ -1,8 +1,20 @@
 import React, { useContext } from 'react';
-import { Grid, Typography, Button } from '@mui/material';
+import { Grid, Typography, Button, Paper, Box, Avatar } from '@mui/material';
+import { styled } from '@mui/material/styles';
 
 import { CoursesContext } from '../../../contexts/courses/courses.context';
 import { Link } from 'react-router-dom';
+
+const CustomPaper = styled(Paper)(({ theme }) => ({
+	...theme.typography.body2,
+	color: theme.palette.text.secondary,
+	// height: 60,
+	marginTop: '20px',
+	marginRight: '20px',
+	borderTopLeftRadius: '5px',
+	borderTopRightRadius: '5px',
+	// lineHeight: '60px',
+}));
 
 const CoursesList = () => {
 	// We  can fetch the courses data from backend here using a useEffect hook and then update it to courses context using setAllCoursesData method of the context.
@@ -21,7 +33,66 @@ const CoursesList = () => {
 				</Grid>
 				<Grid item sx={{ minHeight: '80vh' }}>
 					{courses.length > 0 ? (
-						'All Courses'
+						<Grid container sx={{ paddingRight: '30px' }}>
+							{courses.map(course => (
+								<Grid
+									item
+									sx={{ width: '28%', cursor: 'pointer' }}
+								>
+									<CustomPaper elevation={8}>
+										<Box
+											sx={{
+												width: '100%',
+												height: '25vh',
+												backgroundImage: `url('https://mdbootstrap.com/img/Photos/Others/images/43.jpg')`,
+												backgroundRepeat: 'no-repeat',
+												backgroundSize: 'cover',
+												backgroundPosition: 'center',
+												borderTopLeftRadius: '5px',
+												borderTopRightRadius: '5px',
+											}}
+										></Box>
+										<Box
+											sx={{
+												overflow: 'hidden',
+												width: '100%',
+												minHeight: '25vh',
+												maxHeight: '50vh',
+												padding: '10px 20px',
+											}}
+										>
+											<Typography variant='h6'>
+												gdghgdh
+											</Typography>
+											<Typography>dhdhsdgddgh</Typography>
+											<Grid
+												container
+												justifyContent='space-between'
+												sx={{ marginTop: '25px' }}
+											>
+												<Grid item>
+													<Avatar
+														sx={{
+															backgroundColor:
+																'#2C3E50',
+															width: 32,
+															height: 32,
+														}}
+													>
+														C
+													</Avatar>
+												</Grid>
+												<Grid item>
+													<Typography variant='h6'>
+														FREE
+													</Typography>
+												</Grid>
+											</Grid>
+										</Box>
+									</CustomPaper>
+								</Grid>
+							))}
+						</Grid>
 					) : (
 						<Grid
 							container
