@@ -4,6 +4,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { CssBaseline } from '@mui/material';
 
 import { UserProvider } from './contexts/user/user.context';
+import { CoursesProvider } from './contexts/courses/courses.context';
 
 import App from './App';
 import './index.css';
@@ -14,7 +15,9 @@ root.render(
 		<BrowserRouter>
 			<CssBaseline />
 			<UserProvider>
-				<App />
+				<CoursesProvider>
+					<App />
+				</CoursesProvider>
 			</UserProvider>
 		</BrowserRouter>
 	</React.StrictMode>

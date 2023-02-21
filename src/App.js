@@ -6,6 +6,8 @@ import AuthRoutes from './routes/auth/auth.routes';
 import DashboardRoutes from './routes/dashboard/dashboard.routes';
 import CoursesList from './components/molecules/courses-list/courses-list.component';
 
+import { CoursesProvider } from './contexts/courses/courses.context';
+
 function App() {
 	return (
 		<Routes>

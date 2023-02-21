@@ -38,6 +38,7 @@ const DashboardTemplate = ({ children }) => {
 	};
 
 	// Sidebar Items
+	// This  data can also be fetched from the backend using useEffect to create a dynamic sidebar
 	const sidebarItems = [
 		{
 			key: 1,
