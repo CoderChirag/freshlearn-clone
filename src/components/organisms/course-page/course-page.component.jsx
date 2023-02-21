@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
-import { Grid, Typography, Paper, Tab, Tabs } from '@mui/material';
+import { Grid, Paper } from '@mui/material';
 
 import CourseIdBar from '../../atoms/course-id-bar/course-id-bar.component';
 import { CoursesContext } from '../../../contexts/courses/courses.context';
