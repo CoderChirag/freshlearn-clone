@@ -43,6 +43,7 @@ export const CoursesProvider = ({ children }) => {
 				type: COURSES_ACTION_TYPES.SET_ALL_COURSES_DATA,
 				payload: courses,
 			});
+			window.localStorage.setItem('courses', JSON.stringify(courses));
 		},
 		[dispatch]
 	);
@@ -53,16 +54,30 @@ export const CoursesProvider = ({ children }) => {
 				type: COURSES_ACTION_TYPES.CREATE_NEW_COURSE,
 				payload: course,
 			});
+			if (window.localStorage.getItem('courses')) {
+				let courses = JSON.parse(
+					window.localStorage.getItem('courses')
+				);
+				courses.push(course);
+				window.localStorage.setItem('courses', JSON.stringify(courses));
+			} else {
+				window.localStorage.setItem(
+					'courses',
+					JSON.stringify([course])
+				);
+			}
 		},
 		[dispatch]
 	);
 
 	const clearCourses = useMemo(
-		() => () =>
+		() => () => {
 			dispatch({
 				type: COURSES_ACTION_TYPES.CLEAR_COURSES,
 				payload: [],
-			}),
+			});
+			window.localStorage.removeItem('courses');
+		},
 		[dispatch]
 	);
 
@@ -70,11 +85,15 @@ export const CoursesProvider = ({ children }) => {
 		const unsubscribe = onAuthStateChange(user => {
 			if (!user) {
 				clearCourses();
+			} else if (window.localStorage.getItem('courses')) {
+				setAllCoursesData(
+					JSON.parse(window.localStorage.getItem('courses'))
+				);
 			}
 		});
 
 		return unsubscribe;
-	}, [clearCourses]);
+	}, [clearCourses, setAllCoursesData]);
 
 	return (
 		<CoursesContext.Provider
