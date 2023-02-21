@@ -295,6 +295,8 @@ const DashboardTemplate = ({ children }) => {
 						paddingTop: '15px',
 						paddingRight: '10px',
 						paddingBottom: '30px',
+						flexGrow: '1!important',
+						maxWidth: '100%!important',
 					}}
 				>
 					{children}
