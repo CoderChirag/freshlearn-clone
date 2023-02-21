@@ -28,6 +28,11 @@ function App() {
 					<Route path='courses/:courseId'>
 						<Route index element={<Navigate to='curriculum' />} />
 						<Route path='curriculum' element={<CoursePage />} />
+						<Route path='pricing' element={<CoursePage />} />
+						<Route path='pages' element={<CoursePage />} />
+						<Route path='drip' element={<CoursePage />} />
+						<Route path='certificate' element={<CoursePage />} />
+						<Route path='gamification' element={<CoursePage />} />
 					</Route>
 					<Route
 						path='masterclass'
