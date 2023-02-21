@@ -11,7 +11,7 @@ import { useModuleControls } from './useModuleControls.hook';
 import { useChapterControls } from './useChapterControls.hook';
 import { CoursesContext } from '../../../contexts/courses/courses.context';
 
-const ModuleConfigurator = () => {
+const ModuleConfigurator = ({ activeChapter, activeChapterHandler }) => {
 	// All courses data
 	const { courses, addNewChapter, addNewModule } = useContext(CoursesContext);
 	// Current Course Id
@@ -25,7 +25,7 @@ const ModuleConfigurator = () => {
 		handleAddModuleInputChange,
 		addModuleInputState,
 		handleAddModule,
-	} = useModuleControls(course, courseId, addNewModule);
+	} = useModuleControls(courseId, addNewModule);
 
 	// Chapter Controls
 	const {
@@ -133,11 +133,15 @@ const ModuleConfigurator = () => {
 								sx={{
 									padding: '15px 15px',
 									cursor: 'pointer',
-									backgroundColor: '#F0F6FF',
+									backgroundColor:
+										chapter.id === activeChapter?.id
+											? '#F0F6FF'
+											: '#fff',
 									'&:hover .MuiTypography-root': {
 										color: 'blue',
 									},
 								}}
+								onClick={() => activeChapterHandler(chapter)}
 							>
 								<Grid
 									container
