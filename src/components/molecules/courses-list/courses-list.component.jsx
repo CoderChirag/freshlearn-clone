@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import {
 	Grid,
@@ -32,7 +33,8 @@ const CustomPaper = styled(Paper)(({ theme }) => ({
 }));
 
 const CoursesList = () => {
-	// We  can fetch the courses data from backend here using a useEffect hook and then update it to courses context using setAllCoursesData method of the context.
+	const navigate = useNavigate();
+	// We  can fetch the courses data from backend here using a useEffect hook and then update it to courses context using setAllCoursesData() method of the context.
 	const { courses, deleteCourse, cloneCourse } = useContext(CoursesContext);
 	// State for menu of every card
 	const [menuState, setMenuState] = React.useState({});
@@ -53,14 +55,20 @@ const CoursesList = () => {
 
 	// Menu Options handlers
 	const handleDeleteCourse = courseId => {
+		// Here we can make a DELETE request to backend to delete the course
+		console.log(`Course (ID: ${courseId}) Deleted Successfully`);
 		deleteCourse(courseId);
 		handleMenuClose(courseId);
 	};
 	const handleCloneCourse = courseId => {
-		cloneCourse({
+		// Here we can make a POST request to backend to clone the course
+		let courseData = {
 			...courses.find(course => course.id === courseId),
 			id: uuidv4(),
-		});
+		};
+		console.log(`Course (ID: ${courseId}) Cloned Successfully`);
+		console.log(courseData);
+		cloneCourse(courseData);
 		handleMenuClose(courseId);
 	};
 
@@ -225,11 +233,11 @@ const CoursesList = () => {
 													}}
 												>
 													<MenuItem
-														onClick={() =>
-															handleMenuClose(
-																course.id
-															)
-														}
+														onClick={() => {
+															navigate(
+																`/dashboard/products/courses/edit-course/${course.id}`
+															);
+														}}
 													>
 														<ModeEditOutlineOutlinedIcon />
 														<Typography

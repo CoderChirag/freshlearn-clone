@@ -39,7 +39,7 @@ const MenuProps = {
 	},
 };
 
-const AddCourse = () => {
+const AddCourse = ({ edit, course, courseEditHandler }) => {
 	const navigate = useNavigate();
 	const { currentUser } = useContext(UserContext);
 	const { createNewCourse } = useContext(CoursesContext);
@@ -48,13 +48,17 @@ const AddCourse = () => {
 	// Submission state
 	const [submitted, setSubmitted] = useState(false);
 	// Course title
-	const [title, setTitle] = useState('');
+	const [title, setTitle] = useState(edit ? course.title : '');
 	// Course description
-	const [description, setDescription] = useState('');
+	const [description, setDescription] = useState(
+		edit ? course.description : ''
+	);
 	// Author name for the course
-	const [author, setauthor] = useState('');
+	const [author, setauthor] = useState(edit ? course.author : '');
 	// Course visibility
-	const [visibility, setVisibility] = useState('public');
+	const [visibility, setVisibility] = useState(
+		edit ? course.visibility : 'public'
+	);
 
 	// Error Validations
 	const [errors, setError] = useState([]);
@@ -159,27 +163,40 @@ const AddCourse = () => {
 
 	const handleSubmit = event => {
 		if (validateForm(true, true, true)) return;
-		const course = {
-			id: uuidv4(),
-			title,
-			description,
-			author,
-			visibility,
-			modules: [
-				{
-					id: uuidv4(),
-					title: 'Module 1',
-					chapters: [
-						{
-							id: uuidv4(),
-							title: 'Chapter 1',
-						},
-					],
-				},
-			],
-		};
-		console.log(course); // Here we can make a post request to send the generated data to backend
-		createNewCourse(course);
+		// If this is an edit request, we need to send the updated data to backend
+		if (edit) {
+			const updatedCourse = {
+				...course,
+				title,
+				description,
+				author,
+				visibility,
+			};
+			courseEditHandler(updatedCourse);
+		} else {
+			const courseData = {
+				id: uuidv4(),
+				title,
+				description,
+				author,
+				visibility,
+				modules: [
+					{
+						id: uuidv4(),
+						title: 'Module 1',
+						chapters: [
+							{
+								id: uuidv4(),
+								title: 'Chapter 1',
+							},
+						],
+					},
+				],
+			};
+			console.log('Course Created Success');
+			console.log(courseData); // Here we can make a post request to send the generated data to backend
+			createNewCourse(courseData);
+		}
 		setSubmitted(true);
 	};
 
@@ -358,7 +375,7 @@ const AddCourse = () => {
 								</Button>
 							</Link>
 							<Button variant='contained' onClick={handleSubmit}>
-								Create Course
+								{edit ? 'Update Course' : 'Create Course'}
 							</Button>
 						</Grid>
 					</Grid>
