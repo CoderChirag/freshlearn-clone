@@ -8,13 +8,21 @@ import { CoursesContext } from '../../../contexts/courses/courses.context';
 
 const Curriculum = () => {
 	// All courses data
-	const { courses } = useContext(CoursesContext);
+	const { courses, editChapter } = useContext(CoursesContext);
 	// Current Course Id
 	const { courseId } = useParams();
 
 	// Current Course State
 	const [course, setCourse] = useState(null);
+	const [activeModule, setActiveModule] = useState(null);
 	const [activeChapter, setActiveChapter] = useState(null);
+
+	// Chapter Edit Handler
+	const handleChapterEdit = chapterData => {
+		console.log(chapterData);
+		setActiveChapter(chapterData);
+		editChapter(courseId, activeModule.id, activeChapter.id, chapterData);
+	};
 
 	// Get current course data
 	useEffect(() => {
@@ -23,9 +31,10 @@ const Curriculum = () => {
 
 	useEffect(() => {
 		if (course && !activeChapter) {
+			setActiveModule(course?.modules[0]);
 			setActiveChapter(course?.modules[0]?.chapters[0]);
 		}
-	}, [course, activeChapter, setActiveChapter]);
+	}, [activeChapter, course, setActiveChapter]);
 
 	return (
 		<Grid
@@ -36,8 +45,12 @@ const Curriculum = () => {
 			<ModuleConfigurator
 				activeChapter={activeChapter}
 				activeChapterHandler={setActiveChapter}
+				activeModuleHandler={setActiveModule}
 			/>
-			<ChapterConfigurator chapter={activeChapter} />
+			<ChapterConfigurator
+				chapter={activeChapter}
+				chapterEditHandler={handleChapterEdit}
+			/>
 		</Grid>
 	);
 };

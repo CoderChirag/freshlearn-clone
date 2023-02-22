@@ -62,6 +62,40 @@ const coursesReducer = (state, action) => {
 					return course;
 				}),
 			};
+		case COURSES_ACTION_TYPES.EDIT_CHAPTER:
+			return {
+				...state,
+				courses: state.courses.map(course => {
+					if (course.id === payload.courseId) {
+						return {
+							...course,
+							modules: course.modules.map(module => {
+								if (module.id === payload.moduleId) {
+									return {
+										...module,
+										chapters: module.chapters.map(
+											chapter => {
+												if (
+													chapter.id ===
+													payload.chapterId
+												) {
+													return {
+														...chapter,
+														...payload.chapter,
+													};
+												}
+												return chapter;
+											}
+										),
+									};
+								}
+								return module;
+							}),
+						};
+					}
+					return course;
+				}),
+			};
 		default:
 			throw new Error(`Unhandled action type: ${type} in coursesReducer`);
 	}
@@ -159,6 +193,21 @@ export const CoursesProvider = ({ children }) => {
 		[dispatch]
 	);
 
+	const editChapter = useMemo(
+		() => (courseId, moduleId, chapterId, chapter) => {
+			dispatch({
+				type: COURSES_ACTION_TYPES.EDIT_CHAPTER,
+				payload: {
+					courseId,
+					moduleId,
+					chapterId,
+					chapter,
+				},
+			});
+		},
+		[dispatch]
+	);
+
 	useEffect(() => {
 		if (state.courses.length > 0) {
 			window.localStorage.setItem(
@@ -192,6 +241,7 @@ export const CoursesProvider = ({ children }) => {
 				setCoursesDataFromStorage,
 				addNewModule,
 				addNewChapter,
+				editChapter,
 			}}
 		>
 			{children}

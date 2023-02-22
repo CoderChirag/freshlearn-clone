@@ -1,4 +1,5 @@
 import React, { Fragment, useState } from 'react';
+import ReactPlayer from 'react-player/youtube';
 import { Grid, Paper, Typography, Box, Button, TextField } from '@mui/material';
 import VideoCallOutlinedIcon from '@mui/icons-material/VideoCallOutlined';
 import PlagiarismOutlinedIcon from '@mui/icons-material/PlagiarismOutlined';
@@ -8,7 +9,7 @@ import QuizOutlinedIcon from '@mui/icons-material/QuizOutlined';
 import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
 import DoneOutlinedIcon from '@mui/icons-material/DoneOutlined';
 
-const ChapterConfigurator = ({ chapter }) => {
+const ChapterConfigurator = ({ chapter, chapterEditHandler }) => {
 	// State for the mode (For now only video mode would be available, all other would just show thier names on the UI)
 	const [mode, setMode] = useState('video');
 
@@ -27,6 +28,12 @@ const ChapterConfigurator = ({ chapter }) => {
 	};
 	const handleAddUrlInputChange = e => {
 		setAddUrlnputState(prev => ({ visible: true, input: e.target.value }));
+	};
+
+	// Submit Handler
+	const handleVideoUrlAdd = () => {
+		chapterEditHandler({ ...chapter, videoUrl: addUrlnputState.input });
+		toggleAddUrlInputVisibility();
 	};
 
 	return (
@@ -173,7 +180,7 @@ const ChapterConfigurator = ({ chapter }) => {
 							</Typography>
 						</Paper>
 					</Grid>
-					{!chapter?.video && (
+					{mode === 'video' && !chapter?.videoUrl && (
 						<Fragment>
 							<Grid
 								container
@@ -229,13 +236,30 @@ const ChapterConfigurator = ({ chapter }) => {
 											minWidth: 'unset',
 										}}
 										disabled={!addUrlnputState?.input}
-										// onClick={}
+										onClick={handleVideoUrlAdd}
 									>
 										<DoneOutlinedIcon />
 									</Button>
 								</Grid>
 							)}
 						</Fragment>
+					)}
+					{mode === 'video' && chapter?.videoUrl && (
+						<Grid
+							container
+							sx={{
+								width: '100%',
+								marginTop: '30px',
+								paddingRight: '20px',
+							}}
+						>
+							<ReactPlayer
+								url={chapter?.videoUrl}
+								controls={true}
+								width='100%'
+								height='480px'
+							/>
+						</Grid>
 					)}
 				</Fragment>
 			)}
