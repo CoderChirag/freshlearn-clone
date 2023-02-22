@@ -77,6 +77,27 @@ const coursesReducer = (state, action) => {
 					return course;
 				}),
 			};
+		case COURSES_ACTION_TYPES.EDIT_MODULE:
+			return {
+				...state,
+				courses: state.courses.map(course => {
+					if (course.id === payload.courseId) {
+						return {
+							...course,
+							modules: course.modules.map(module => {
+								if (module.id === payload.moduleId) {
+									return {
+										...module,
+										...payload.module,
+									};
+								}
+								return module;
+							}),
+						};
+					}
+					return course;
+				}),
+			};
 		case COURSES_ACTION_TYPES.EDIT_CHAPTER:
 			return {
 				...state,
@@ -118,10 +139,86 @@ const coursesReducer = (state, action) => {
 					course => course.id !== payload.courseId
 				),
 			};
+		case COURSES_ACTION_TYPES.DELETE_MODULE:
+			return {
+				...state,
+				courses: state.courses.map(course => {
+					if (course.id === payload.courseId) {
+						return {
+							...course,
+							modules: course.modules.filter(
+								module => module.id !== payload.moduleId
+							),
+						};
+					}
+					return course;
+				}),
+			};
+		case COURSES_ACTION_TYPES.DELETE_CHAPTER:
+			return {
+				...state,
+				courses: state.courses.map(course => {
+					if (course.id === payload.courseId) {
+						return {
+							...course,
+							modules: course.modules.map(module => {
+								if (module.id === payload.moduleId) {
+									return {
+										...module,
+										chapters: module.chapters.filter(
+											chapter =>
+												chapter.id !== payload.chapterId
+										),
+									};
+								}
+								return module;
+							}),
+						};
+					}
+					return course;
+				}),
+			};
 		case COURSES_ACTION_TYPES.CLONE_COURSE:
 			return {
 				...state,
 				courses: [...state.courses, payload],
+			};
+		case COURSES_ACTION_TYPES.CLONE_MODULE:
+			return {
+				...state,
+				courses: state.courses.map(course => {
+					if (course.id === payload.courseId) {
+						return {
+							...course,
+							modules: [...course.modules, payload.module],
+						};
+					}
+					return course;
+				}),
+			};
+		case COURSES_ACTION_TYPES.CLONE_CHAPTER:
+			return {
+				...state,
+				courses: state.courses.map(course => {
+					if (course.id === payload.courseId) {
+						return {
+							...course,
+							modules: course.modules.map(module => {
+								if (module.id === payload.moduleId) {
+									return {
+										...module,
+										chapters: [
+											...module.chapters,
+											payload.chapter,
+										],
+									};
+								}
+								return module;
+							}),
+						};
+					}
+					return course;
+				}),
 			};
 		default:
 			throw new Error(`Unhandled action type: ${type} in coursesReducer`);
@@ -233,6 +330,20 @@ export const CoursesProvider = ({ children }) => {
 		[dispatch]
 	);
 
+	const editModule = useMemo(
+		() => (courseId, moduleId, module) => {
+			dispatch({
+				type: COURSES_ACTION_TYPES.EDIT_MODULE,
+				payload: {
+					courseId,
+					moduleId,
+					module,
+				},
+			});
+		},
+		[dispatch]
+	);
+
 	const editChapter = useMemo(
 		() => (courseId, moduleId, chapterId, chapter) => {
 			dispatch({
@@ -260,11 +371,65 @@ export const CoursesProvider = ({ children }) => {
 		[dispatch]
 	);
 
+	const deleteModule = useMemo(
+		() => (courseId, moduleId) => {
+			dispatch({
+				type: COURSES_ACTION_TYPES.DELETE_MODULE,
+				payload: {
+					courseId,
+					moduleId,
+				},
+			});
+		},
+		[dispatch]
+	);
+
+	const deleteChapter = useMemo(
+		() => (courseId, moduleId, chapterId) => {
+			dispatch({
+				type: COURSES_ACTION_TYPES.DELETE_CHAPTER,
+				payload: {
+					courseId,
+					moduleId,
+					chapterId,
+				},
+			});
+		},
+		[dispatch]
+	);
+
 	const cloneCourse = useMemo(
 		() => course => {
 			dispatch({
 				type: COURSES_ACTION_TYPES.CLONE_COURSE,
 				payload: course,
+			});
+		},
+		[dispatch]
+	);
+
+	const cloneModule = useMemo(
+		() => (courseId, module) => {
+			dispatch({
+				type: COURSES_ACTION_TYPES.CLONE_MODULE,
+				payload: {
+					courseId,
+					module,
+				},
+			});
+		},
+		[dispatch]
+	);
+
+	const cloneChapter = useMemo(
+		() => (courseId, moduleId, chapter) => {
+			dispatch({
+				type: COURSES_ACTION_TYPES.CLONE_CHAPTER,
+				payload: {
+					courseId,
+					moduleId,
+					chapter,
+				},
 			});
 		},
 		[dispatch]
@@ -304,9 +469,14 @@ export const CoursesProvider = ({ children }) => {
 				addNewModule,
 				addNewChapter,
 				editCourse,
+				editModule,
 				editChapter,
 				deleteCourse,
+				deleteModule,
+				deleteChapter,
 				cloneCourse,
+				cloneModule,
+				cloneChapter,
 			}}
 		>
 			{children}
