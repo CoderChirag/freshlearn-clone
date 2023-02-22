@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import {
 	Grid,
 	Typography,
@@ -32,7 +33,7 @@ const CustomPaper = styled(Paper)(({ theme }) => ({
 
 const CoursesList = () => {
 	// We  can fetch the courses data from backend here using a useEffect hook and then update it to courses context using setAllCoursesData method of the context.
-	const { courses } = useContext(CoursesContext);
+	const { courses, deleteCourse, cloneCourse } = useContext(CoursesContext);
 	// State for menu of every card
 	const [menuState, setMenuState] = React.useState({});
 
@@ -48,6 +49,19 @@ const CoursesList = () => {
 			...menuState,
 			[courseId]: { open: false, target: null },
 		});
+	};
+
+	// Menu Options handlers
+	const handleDeleteCourse = courseId => {
+		deleteCourse(courseId);
+		handleMenuClose(courseId);
+	};
+	const handleCloneCourse = courseId => {
+		cloneCourse({
+			...courses.find(course => course.id === courseId),
+			id: uuidv4(),
+		});
+		handleMenuClose(courseId);
 	};
 
 	return (
@@ -85,7 +99,10 @@ const CoursesList = () => {
 									<CustomPaper elevation={8}>
 										<Link
 											to={`/dashboard/products/courses/${course.id}/curriculum`}
-											style={{ textDecoration: 'none' }}
+											style={{
+												textDecoration: 'none',
+												color: 'inherit',
+											}}
 										>
 											<Box
 												sx={{
@@ -196,7 +213,7 @@ const CoursesList = () => {
 													}
 													open={
 														menuState[course.id]
-															?.open
+															?.open || false
 													}
 													onClose={() =>
 														handleMenuClose(
@@ -227,7 +244,7 @@ const CoursesList = () => {
 													</MenuItem>
 													<MenuItem
 														onClick={() =>
-															handleMenuClose(
+															handleDeleteCourse(
 																course.id
 															)
 														}
@@ -245,7 +262,7 @@ const CoursesList = () => {
 													</MenuItem>
 													<MenuItem
 														onClick={() =>
-															handleMenuClose(
+															handleCloneCourse(
 																course.id
 															)
 														}

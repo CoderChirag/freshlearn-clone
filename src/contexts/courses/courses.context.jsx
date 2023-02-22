@@ -1,5 +1,4 @@
 import { createContext, useEffect, useMemo, useReducer } from 'react';
-import { v4 as uuidv4 } from 'uuid';
 
 import { COURSES_ACTION_TYPES } from './courses.types';
 import { onAuthStateChange } from '../../util/firebase/auth/firebase-auth.util';
