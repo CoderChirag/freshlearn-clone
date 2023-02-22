@@ -1,14 +1,33 @@
 import React, { Fragment, useState } from 'react';
-import { Grid, Paper, Typography } from '@mui/material';
+import { Grid, Paper, Typography, Box, Button, TextField } from '@mui/material';
 import VideoCallOutlinedIcon from '@mui/icons-material/VideoCallOutlined';
 import PlagiarismOutlinedIcon from '@mui/icons-material/PlagiarismOutlined';
 import VolumeMuteOutlinedIcon from '@mui/icons-material/VolumeMuteOutlined';
 import WifiTetheringOutlinedIcon from '@mui/icons-material/WifiTetheringOutlined';
 import QuizOutlinedIcon from '@mui/icons-material/QuizOutlined';
 import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
+import DoneOutlinedIcon from '@mui/icons-material/DoneOutlined';
 
 const ChapterConfigurator = ({ chapter }) => {
+	// State for the mode (For now only video mode would be available, all other would just show thier names on the UI)
 	const [mode, setMode] = useState('video');
+
+	// URL Input field state
+	const [addUrlnputState, setAddUrlnputState] = useState({
+		visible: false,
+		input: '',
+	});
+
+	// Handling URL Input field state
+	const toggleAddUrlInputVisibility = () => {
+		setAddUrlnputState(prev => ({
+			visible: !prev.visible,
+			input: prev.visible ? '' : prev.input,
+		}));
+	};
+	const handleAddUrlInputChange = e => {
+		setAddUrlnputState(prev => ({ visible: true, input: e.target.value }));
+	};
 
 	return (
 		<Grid
@@ -154,6 +173,70 @@ const ChapterConfigurator = ({ chapter }) => {
 							</Typography>
 						</Paper>
 					</Grid>
+					{!chapter?.video && (
+						<Fragment>
+							<Grid
+								container
+								justifyContent='center'
+								sx={{ marginTop: '40px' }}
+							>
+								<Box
+									sx={{
+										width: '35%',
+										padding: '20px 20px',
+										display: 'flex',
+										justifyContent: 'center',
+										backgroundColor: '#fff',
+										cursor: 'pointer',
+									}}
+									onClick={toggleAddUrlInputVisibility}
+								>
+									<img
+										src='https://cdn.freshlms.info/icons/svg__images/youtube_icon.svg'
+										alt='youtube_logo'
+										style={{ marginRight: '15px' }}
+									/>
+									<Grid container flexDirection='column'>
+										<Typography variant='p'>
+											Youtube
+										</Typography>
+										<Typography variant='caption'>
+											You can add the Youtube url
+										</Typography>
+									</Grid>
+								</Box>
+							</Grid>
+							{addUrlnputState?.visible && (
+								<Grid container sx={{ marginTop: '30px' }}>
+									<TextField
+										id={`add-youtube-video`}
+										label='Add Video Url'
+										variant='outlined'
+										size='small'
+										sx={{
+											// marginTop: '30px',
+											backgroundColor: '#fff',
+											width: '80%',
+										}}
+										value={addUrlnputState?.input || ''}
+										onChange={handleAddUrlInputChange}
+									/>
+									<Button
+										variant='contained'
+										sx={{
+											marginLeft: '30px',
+											width: '40px',
+											minWidth: 'unset',
+										}}
+										disabled={!addUrlnputState?.input}
+										// onClick={}
+									>
+										<DoneOutlinedIcon />
+									</Button>
+								</Grid>
+							)}
+						</Fragment>
+					)}
 				</Fragment>
 			)}
 		</Grid>
