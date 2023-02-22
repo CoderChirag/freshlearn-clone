@@ -66,6 +66,7 @@ export const useChapterControls = (course, courseId, addNewChapter) => {
 			id: uuidv4(),
 			title: addChapterInputState[moduleId].input,
 		};
+		console.log('Chapter Added Successfully');
 		console.log(newChapter);
 		addNewChapter(courseId, moduleId, newChapter);
 		toggleAddChapterInputVisibility(moduleId);

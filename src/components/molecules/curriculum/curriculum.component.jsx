@@ -44,6 +44,7 @@ const Curriculum = () => {
 		>
 			<ModuleConfigurator
 				activeChapter={activeChapter}
+				activeModule={activeModule}
 				activeChapterHandler={setActiveChapter}
 				activeModuleHandler={setActiveModule}
 			/>

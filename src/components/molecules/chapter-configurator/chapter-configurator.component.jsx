@@ -32,6 +32,7 @@ const ChapterConfigurator = ({ chapter, chapterEditHandler }) => {
 
 	// Submit Handler
 	const handleVideoUrlAdd = () => {
+		console.log('Video URL Added Successfully');
 		chapterEditHandler({ ...chapter, videoUrl: addUrlnputState.input });
 		toggleAddUrlInputVisibility();
 	};

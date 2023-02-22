@@ -40,6 +40,7 @@ export const useModuleControls = (courseId, addNewModule) => {
 				},
 			],
 		};
+		console.log('Module Added Successfully');
 		console.log(newModule);
 		addNewModule(courseId, newModule);
 		setAddModuleInputState({ visible: false, input: '' });

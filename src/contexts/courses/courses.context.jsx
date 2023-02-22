@@ -2,6 +2,7 @@ import { createContext, useEffect, useMemo, useReducer } from 'react';
 
 import { COURSES_ACTION_TYPES } from './courses.types';
 import { onAuthStateChange } from '../../util/firebase/auth/firebase-auth.util';
+import { json } from 'react-router-dom';
 
 export const CoursesContext = createContext({
 	courses: [],
@@ -367,6 +368,9 @@ export const CoursesProvider = ({ children }) => {
 					courseId,
 				},
 			});
+			if (state.courses.length === 0) {
+				window.localStorage.removeItem('courses');
+			}
 		},
 		[dispatch]
 	);
