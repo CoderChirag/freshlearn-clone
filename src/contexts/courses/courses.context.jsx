@@ -1,4 +1,5 @@
 import { createContext, useEffect, useMemo, useReducer } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 
 import { COURSES_ACTION_TYPES } from './courses.types';
 import { onAuthStateChange } from '../../util/firebase/auth/firebase-auth.util';
@@ -62,6 +63,21 @@ const coursesReducer = (state, action) => {
 					return course;
 				}),
 			};
+		case COURSES_ACTION_TYPES.EDIT_COURSE:
+			return {
+				...state,
+				courses: state.courses.map(course => {
+					if (course.id === payload.courseId) {
+						return {
+							...course,
+							title: payload.courseData.title,
+							description: payload.courseData.description,
+							visibility: payload.courseData.visibility,
+						};
+					}
+					return course;
+				}),
+			};
 		case COURSES_ACTION_TYPES.EDIT_CHAPTER:
 			return {
 				...state,
@@ -95,6 +111,18 @@ const coursesReducer = (state, action) => {
 					}
 					return course;
 				}),
+			};
+		case COURSES_ACTION_TYPES.DELETE_COURSE:
+			return {
+				...state,
+				courses: state.courses.filter(
+					course => course.id !== payload.courseId
+				),
+			};
+		case COURSES_ACTION_TYPES.CLONE_COURSE:
+			return {
+				...state,
+				courses: [...state.courses, payload],
 			};
 		default:
 			throw new Error(`Unhandled action type: ${type} in coursesReducer`);
@@ -193,6 +221,19 @@ export const CoursesProvider = ({ children }) => {
 		[dispatch]
 	);
 
+	const editCourse = useMemo(
+		() => (courseId, courseData) => {
+			dispatch({
+				type: COURSES_ACTION_TYPES.EDIT_COURSE,
+				payload: {
+					courseId,
+					courseData,
+				},
+			});
+		},
+		[dispatch]
+	);
+
 	const editChapter = useMemo(
 		() => (courseId, moduleId, chapterId, chapter) => {
 			dispatch({
@@ -203,6 +244,28 @@ export const CoursesProvider = ({ children }) => {
 					chapterId,
 					chapter,
 				},
+			});
+		},
+		[dispatch]
+	);
+
+	const deleteCourse = useMemo(
+		() => courseId => {
+			dispatch({
+				type: COURSES_ACTION_TYPES.DELETE_COURSE,
+				payload: {
+					courseId,
+				},
+			});
+		},
+		[dispatch]
+	);
+
+	const cloneCourse = useMemo(
+		() => course => {
+			dispatch({
+				type: COURSES_ACTION_TYPES.CLONE_COURSE,
+				payload: course,
 			});
 		},
 		[dispatch]
@@ -241,7 +304,10 @@ export const CoursesProvider = ({ children }) => {
 				setCoursesDataFromStorage,
 				addNewModule,
 				addNewChapter,
+				editCourse,
 				editChapter,
+				deleteCourse,
+				cloneCourse,
 			}}
 		>
 			{children}
