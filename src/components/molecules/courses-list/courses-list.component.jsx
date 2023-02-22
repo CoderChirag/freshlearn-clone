@@ -1,6 +1,20 @@
 import React, { useContext } from 'react';
-import { Grid, Typography, Button, Paper, Box, Avatar } from '@mui/material';
+import {
+	Grid,
+	Typography,
+	Button,
+	Paper,
+	Box,
+	Avatar,
+	Divider,
+	Menu,
+	MenuItem,
+} from '@mui/material';
 import { styled } from '@mui/material/styles';
+import MoreVertOutlinedIcon from '@mui/icons-material/MoreVertOutlined';
+import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
+import FileCopyOutlinedIcon from '@mui/icons-material/FileCopyOutlined';
 
 import { CoursesContext } from '../../../contexts/courses/courses.context';
 import { Link } from 'react-router-dom';
@@ -19,6 +33,22 @@ const CustomPaper = styled(Paper)(({ theme }) => ({
 const CoursesList = () => {
 	// We  can fetch the courses data from backend here using a useEffect hook and then update it to courses context using setAllCoursesData method of the context.
 	const { courses } = useContext(CoursesContext);
+	// State for menu of every card
+	const [menuState, setMenuState] = React.useState({});
+
+	// Handle menu state for every card
+	const handleMenuOpen = (e, courseId) => {
+		setMenuState({
+			...menuState,
+			[courseId]: { open: true, target: e.currentTarget },
+		});
+	};
+	const handleMenuClose = courseId => {
+		setMenuState({
+			...menuState,
+			[courseId]: { open: false, target: null },
+		});
+	};
 
 	return (
 		<>
@@ -52,11 +82,11 @@ const CoursesList = () => {
 									item
 									sx={{ width: '28%', cursor: 'pointer' }}
 								>
-									<Link
-										to={`/dashboard/products/courses/${course.id}/curriculum`}
-										style={{ textDecoration: 'none' }}
-									>
-										<CustomPaper elevation={8}>
+									<CustomPaper elevation={8}>
+										<Link
+											to={`/dashboard/products/courses/${course.id}/curriculum`}
+											style={{ textDecoration: 'none' }}
+										>
 											<Box
 												sx={{
 													width: '100%',
@@ -75,7 +105,7 @@ const CoursesList = () => {
 												sx={{
 													overflow: 'hidden',
 													width: '100%',
-													minHeight: '25vh',
+													minHeight: '18vh',
 													maxHeight: '50vh',
 													padding: '10px 20px',
 												}}
@@ -110,8 +140,131 @@ const CoursesList = () => {
 													</Grid>
 												</Grid>
 											</Box>
-										</CustomPaper>
-									</Link>
+										</Link>
+										<Box sx={{ padding: '10px 20px' }}>
+											<Divider />
+											<Grid
+												container
+												justifyContent='space-between'
+												alignItems='center'
+												sx={{
+													marginTop: '10px',
+												}}
+											>
+												<Typography
+													variant='p'
+													color='red'
+													fontWeight={600}
+												>
+													Draft
+												</Typography>
+												<Button
+													id={`course-menu-button-${course.id}`}
+													aria-controls={
+														menuState[course.id]
+															?.open
+															? `course-menu-${course.id}`
+															: undefined
+													}
+													aria-haspopup='true'
+													aria-expanded={
+														menuState[course.id]
+															?.open
+															? 'true'
+															: undefined
+													}
+													onClick={e =>
+														handleMenuOpen(
+															e,
+															course.id
+														)
+													}
+													variant='text'
+													size='small'
+													sx={{
+														color: 'inherit',
+														minWidth: '0px',
+													}}
+												>
+													<MoreVertOutlinedIcon />
+												</Button>
+												<Menu
+													id={`course-menu-${course.id}`}
+													anchorEl={
+														menuState[course.id]
+															?.target
+													}
+													open={
+														menuState[course.id]
+															?.open
+													}
+													onClose={() =>
+														handleMenuClose(
+															course.id
+														)
+													}
+													MenuListProps={{
+														'aria-labelledby': `course-menu-button-${course.id}`,
+													}}
+												>
+													<MenuItem
+														onClick={() =>
+															handleMenuClose(
+																course.id
+															)
+														}
+													>
+														<ModeEditOutlineOutlinedIcon />
+														<Typography
+															variant='p'
+															sx={{
+																marginLeft:
+																	'10px',
+															}}
+														>
+															Edit
+														</Typography>
+													</MenuItem>
+													<MenuItem
+														onClick={() =>
+															handleMenuClose(
+																course.id
+															)
+														}
+													>
+														<DeleteOutlineOutlinedIcon />
+														<Typography
+															variant='p'
+															sx={{
+																marginLeft:
+																	'10px',
+															}}
+														>
+															Delete
+														</Typography>
+													</MenuItem>
+													<MenuItem
+														onClick={() =>
+															handleMenuClose(
+																course.id
+															)
+														}
+													>
+														<FileCopyOutlinedIcon />
+														<Typography
+															variant='p'
+															sx={{
+																marginLeft:
+																	'10px',
+															}}
+														>
+															Clone
+														</Typography>
+													</MenuItem>
+												</Menu>
+											</Grid>
+										</Box>
+									</CustomPaper>
 								</Grid>
 							))}
 						</Grid>
